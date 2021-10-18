@@ -1,0 +1,794 @@
+<!DOCTYPE html> <html class="hasSidebar hasPageActions hasBreadcrumb conceptual has-default-focus js-focus-visible theme-light" dir=ltr data-css-variable-support=true data-authenticated=false data-auth-status-determined=true data-target=docs x-ms-format-detection=none data-js-focus-visible style lang=en-us><!--
+ Page saved with SingleFile 
+ url: https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipe-client 
+ saved date: Thu Feb 11 2021 10:05:24 GMT+0100 (heure normale d’Europe centrale)
+--><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1.0">
+<meta property=og:title content="Named Pipe Client - Win32 apps">
+<meta property=og:type content=website>
+<meta property=og:url content=https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipe-client>
+<meta property=og:description content="Code example shows a pipe client that opens a named pipe, sets the pipe handle to message-read mode, uses the WriteFile function to send a request to the server, and uses the ReadFile function to read the servers reply.">
+<meta property=og:image content=https://docs.microsoft.com/en-us/media/logos/logo-ms-social.png>
+<meta property=og:image:alt content="Microsoft Logo">
+<meta name=twitter:card content=summary>
+<meta name=twitter:site content=@docsmsft>
+<meta name=author content=mcleanbyron>
+<meta name=breadcrumb_path content=/windows/desktop/breadcrumb/toc.json>
+<meta name=depot_name content=MSDN.win32>
+<meta name=description content="Code example shows a pipe client that opens a named pipe, sets the pipe handle to message-read mode, uses the WriteFile function to send a request to the server, and uses the ReadFile function to read the servers reply.">
+<meta name=document_id content=1e242280-4915-b182-0dc3-226c639a9e3e>
+<meta name=document_version_independent_id content=15e820a1-41e0-8512-d7a2-342fd2cd9fe8>
+<meta name=gitcommit content=https://github.com/MicrosoftDocs/win32-pr/blob/168ea81e99127aaa466906b01dfcdf18c365d3e2/desktop-src/ipc/named-pipe-client.md>
+<meta name=locale content=en-us>
+<meta name=ms.assetid content=0779242c-45f4-4cd9-9c9f-36cff54c8dee>
+<meta name=ms.author content=mcleans>
+<meta name=ms.date content=05/31/2018>
+<meta name=ms.prod content=desktop>
+<meta name=ms.technology content=system-services>
+<meta name=ms.topic content=article>
+<meta name=original_content_git_url content=https://github.com/MicrosoftDocs/win32-pr/blob/live/desktop-src/ipc/named-pipe-client.md>
+<meta name=search.ms_docsetname content=win32>
+<meta name=search.ms_product content=MSDN>
+<meta name=search.ms_sitename content=Docs>
+<meta name=site_name content=Docs>
+<meta name=uhfHeaderId content=MSDocsHeader-WinDevCenter>
+<meta name=updated_at content="2021-01-07 08:56 PM">
+<meta name=page_type content=conceptual>
+<meta name=toc_rel content=toc.json>
+<meta name=pdf_url_template content=https://docs.microsoft.com/pdfstore/en-us/MSDN.win32/{branchName}{pdfName}>
+<meta name=word_count content=705>
+<meta name=scope content="Windows, Desktop">
+<link href=https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipe-client rel=canonical>
+<title>Named Pipe Client - Win32 apps | Microsoft Docs</title>
+<style id=ms-consent-banner-theme-styles>html{line-height:1.15;-webkit-text-size-adjust:100%}main{display:block}a{background-color:transparent}code{font-size:1em}img{border-style:none}button,input{font-family:inherit;font-size:100%;line-height:1.15}input{overflow:visible}button{text-transform:none}[type=button],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}body,dl,dt,h1,h2,h3,html,li,ol,p,ul{margin:0;padding:0}ul{list-style:none}button,input{margin:0}*,:after,:before{box-sizing:inherit}.button,.nav-bar-button{-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}.has-default-focus .focus-visible,.input:active{outline-color:inherit;outline-offset:.125rem;outline-style:dashed;outline-width:.125rem}.button.has-external-link-indicator[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after,.content a:not([class]):not(.button):not(.nav-bar-button)[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after,.nav-bar-button.has-external-link-indicator[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after,a.has-external-link-indicator:not(.button):not(.nav-bar-button)[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after{-webkit-mask-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2048 2048'%3E%3Cpath d='M1792 256v640h-128V475l-851 850-90-90 850-851h-421V256h640zm-512 1007h128v529H256V640h529v128H384v896h896v-401z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2048 2048'%3E%3Cpath d='M1792 256v640h-128V475l-851 850-90-90 850-851h-421V256h640zm-512 1007h128v529H256V640h529v128H384v896h896v-401z'/%3E%3C/svg%3E");background-color:currentColor!important;content:"";-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center}@media (-ms-high-contrast:active),(-ms-high-contrast:none){.button.has-external-link-indicator[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after,.content a:not([class]):not(.button):not(.nav-bar-button)[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after,.nav-bar-button.has-external-link-indicator[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after,a.has-external-link-indicator:not(.button):not(.nav-bar-button)[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after{display:none}}.content a:not([class]):not(.button):not(.nav-bar-button)[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after,a.has-external-link-indicator:not(.button):not(.nav-bar-button)[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after{padding:0 .4375em;margin:0 .125rem;-webkit-clip-path:padding-box inset(.28125em 0);clip-path:padding-box inset(.28125em 0)}.button.has-external-link-indicator[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after,.nav-bar-button.has-external-link-indicator[href*="//"]:not([href*="docs.microsoft.com"]):not([href*="docs.azure.cn"]):not([href*="startups.microsoft.com"]):not([href*="rd.microsoft.com"]):not([href*="developer.microsoft.com"]):not([href*="localhost:"]):after{width:1em;height:1em;margin-left:.25em}.button,.input{-webkit-appearance:none;-moz-appearance:none;align-items:center;border:1px solid transparent;box-shadow:none;display:inline-flex;height:2.25em;justify-content:flex-start;line-height:1.5;padding-bottom:calc(.375em - 1px);padding-top:calc(.375em - 1px);position:relative;vertical-align:top}.has-border-top{border-top:1px solid hsla(0,0%,89%,1)!important;border-top:1px solid var(--theme-border)!important}.has-border-bottom{border-bottom:1px solid hsla(0,0%,89%,1)!important;border-bottom:1px solid var(--theme-border)!important}.has-border-bottom-none{border-bottom:0!important}.has-text-primary{color:hsla(206,100%,35%,1)!important;color:var(--theme-primary-base)!important}.has-text-success-invert{color:hsla(0,0%,100%,.995)!important;color:var(--theme-success-invert)!important}.has-background-success{background-color:hsla(120,77%,30%,.999)!important;background-color:var(--theme-success-base)!important;outline-color:var(--theme-success-invert)}.has-body-background-medium{background-color:hsla(0,0%,98%,1)!important;background-color:var(--theme-body-background-medium)!important}.has-fill-current-color{fill:currentColor!important}.has-outline-color-text{outline-color:hsla(0,0%,9%,1)!important;outline-color:var(--theme-text)!important}.is-block{display:block!important}.is-flex{display:flex!important}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (max-width:1087.9px),screen and (max-width:1087px),screen and (min-resolution:120dpi) and (max-width:1087.9px){.is-flex-touch{display:flex!important}}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (max-width:767.9px),screen and (max-width:767px),screen and (min-resolution:120dpi) and (max-width:767.9px){.is-hidden-mobile{display:none!important}}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (max-width:767.9px) and (-webkit-min-device-pixel-ratio:1.25) and (max-aspect-ratio:1/1),screen and (-webkit-min-device-pixel-ratio:1.25) and (max-width:767.9px) and (max-aspect-ratio:1/1),screen and (max-width:767px) and (-webkit-min-device-pixel-ratio:1.25) and (max-aspect-ratio:1/1),screen and (max-width:767px) and (max-aspect-ratio:1/1),screen and (max-width:767px) and (min-resolution:120dpi) and (max-aspect-ratio:1/1),screen and (min-resolution:120dpi) and (max-width:767.9px) and (max-aspect-ratio:1/1),screen and (min-resolution:120dpi) and (max-width:767.9px) and (min-resolution:120dpi) and (max-aspect-ratio:1/1){.is-hidden-portrait{display:none!important}}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (min-width:768px) and (max-width:1087.9px),screen and (min-resolution:120dpi) and (min-width:768px) and (max-width:1087.9px),screen and (min-width:768px) and (max-width:1087px){.is-hidden-tablet-only{display:none!important}}.is-invisible{visibility:hidden!important}.visually-hidden,.visually-hidden-until-focused:not(:focus){border:0;clip:rect(1px,1px,1px,1px);-webkit-clip-path:inset(50%);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (max-width:1087.9px),screen and (max-width:1087px),screen and (min-resolution:120dpi) and (max-width:1087.9px){.is-visually-hidden-touch{border:0;clip:rect(1px,1px,1px,1px);-webkit-clip-path:inset(50%);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal}}.is-full-height{height:100%}.is-unstyled{list-style-type:none!important}.is-vertically-scrollable{overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch}.is-full-width{width:100%!important}.expanded-indicator{transition:transform .15s}.has-overflow-hidden{overflow:hidden!important}.is-size-large{font-size:1.125rem!important}.is-size-small{font-size:.875rem!important}.is-size-extra-small{font-size:.75rem!important}.has-text-weight-semibold{font-weight:600!important}.has-text-subtle{color:hsla(0,0%,37%,1)!important;color:var(--theme-text-subtle)!important}.has-text-centered{text-align:center!important}.has-padding-none{padding:0!important}.has-padding-medium{padding:1rem!important}.has-margin-top-none{margin-top:0!important}.has-margin-left-none{margin-left:0!important}.has-margin-top-small{margin-top:.5rem!important}.has-margin-right-small{margin-right:.5rem!important}.has-margin-bottom-small{margin-bottom:.5rem!important}.has-padding-bottom-small{padding-bottom:.5rem!important}.has-margin-right-medium{margin-right:1rem!important}.has-margin-left-medium{margin-left:1rem!important}@media print,screen and (min-width:768px){.has-padding-none-tablet{padding:0!important}.has-padding-right-medium-tablet{padding-right:1rem!important}.has-padding-left-medium-tablet{padding-left:1rem!important}}@media print,screen and (min-width:860px){.has-padding-left-none-uhf-tablet{padding-left:0!important}}@media screen and (min-width:1088px){.has-padding-none-desktop{padding:0!important}.has-padding-right-extra-large-desktop{padding-right:3rem!important}}.is-fixed{position:fixed!important}.is-absolute{position:absolute!important}.is-relative{position:relative!important}.has-top-zero{top:0}.has-bottom-zero{bottom:0}.has-left-zero{left:0}.has-right-zero{right:0}.has-flex-align-items-center{align-items:center!important}.has-flex-justify-content-start{justify-content:flex-start!important}.has-flex-justify-content-center{justify-content:center!important}.has-flex-justify-content-space-between-touch{justify-content:space-between!important}@media print,screen and (min-width:768px){.has-flex-justify-content-end-tablet{justify-content:flex-end!important}}.has-flex-grow{flex-grow:1!important}.has-flex-shrink{flex-shrink:1!important}.is-flex-column{flex-direction:column!important}.is-flex-row{flex-direction:row!important}.has-flex-shrink-none{flex-shrink:0!important}.has-flex-wrap{flex-wrap:wrap!important}.theme-light,:root{--theme-text:#171717;--theme-text-subtle:#5e5e5e;--theme-text-invert:white;--theme-text-glow-high-contrast:#171717;--theme-box-shadow-light:rgba(0,0,0,0.108);--theme-box-shadow-medium:rgba(0,0,0,0.132);--theme-box-shadow-heavy:rgba(0,0,0,0.18);--theme-box-shadow-extra-heavy:rgba(0,0,0,0.22);--theme-overlay:rgba(0,0,0,0.7);--theme-overlay-invert:white;--theme-body-background:white;--theme-body-background-medium:#fafafa;--theme-body-background-dark:#f2f2f2;--theme-border:#e3e3e3;--theme-table-header:#e3e3e3;--theme-table-row-header:#fafafa;--theme-table-border-dark:#c7c7c7;--theme-hover-base:#2e2e2e;--theme-hover-invert:#fafafa;--theme-border-white-high-contrast:rgba(255,255,255,0);--theme-border-yellow-high-contrast:rgba(0,0,0,0);--theme-code-highlight-background:#fff1cc;--theme-visited:#660099;--theme-score-low-off:rgba(218,59,1,0.3);--theme-score-low:#da3b01;--theme-score-medium-off:rgba(255,187,0,0.3);--theme-score-medium:#ffbb00;--theme-score-high-off:rgba(18,135,18,0.3);--theme-score-high:#128712;--theme-primary-base:#0065b3;--theme-primary-background:#e0f2ff;--theme-primary-background-glow-high-contrast:#e0f2ff;--theme-primary-dark:#002b4d;--theme-primary-hover:#00518f;--theme-primary-active:#003a66;--theme-primary-box-shadow:rgba(0,101,179,0.3);--theme-primary-invert:white;--theme-secondary-base:#ababab;--theme-secondary-background:#e3e3e3;--theme-secondary-background-glow-high-contrast:#e3e3e3;--theme-secondary-dark:#2e2e2e;--theme-secondary-hover:#c7c7c7;--theme-secondary-active:#c7c7c7;--theme-secondary-box-shadow:rgba(0,0,0,0.3);--theme-secondary-invert:black;--theme-tertiary-base:#454545;--theme-tertiary-background:#171717;--theme-tertiary-background-glow-high-contrast:#171717;--theme-tertiary-dark:#e3e3e3;--theme-tertiary-hover:#5e5e5e;--theme-tertiary-active:#757575;--theme-tertiary-box-shadow:rgba(0,101,179,0.3);--theme-tertiary-invert:white;--theme-success-base:#128712;--theme-success-background:#d2f9d2;--theme-success-background-glow-high-contrast:#d2f9d2;--theme-success-dark:#094409;--theme-success-hover:#0f710f;--theme-success-active:#0c5a0c;--theme-success-box-shadow:rgba(18,135,18,0.3);--theme-success-invert:white;--theme-info-base:#8763c5;--theme-info-background:#e2daf1;--theme-info-background-glow-high-contrast:#e2daf1;--theme-info-dark:#38225d;--theme-info-hover:#7045ba;--theme-info-active:#53338a;--theme-info-box-shadow:#e2daf1;--theme-info-invert:white;--theme-inline-code:#e3e3e3;--theme-warning-base:#ffbb00;--theme-warning-background:#fff1cc;--theme-warning-background-glow-high-contrast:#fff1cc;--theme-warning-dark:#664b00;--theme-warning-hover:#cc9600;--theme-warning-active:#997000;--theme-warning-box-shadow:rgba(255,187,0,0.3);--theme-warning-invert:black;--theme-danger-base:#da3b01;--theme-danger-background:#ffdacc;--theme-danger-background-glow-high-contrast:#ffdacc;--theme-danger-dark:#651b01;--theme-danger-hover:#b23001;--theme-danger-active:#7f2201;--theme-danger-box-shadow:rgba(218,59,1,0.3);--theme-danger-invert:white;--theme-facepile-red:#da3b01;--theme-facepile-teal:#008575;--theme-facepile-blue:#0065b3}.theme-light{color:var(--theme-text);background-color:var(--theme-body-background);outline-color:var(--theme-text)}body,html{font-family:Segoe UI,SegoeUI,Helvetica Neue,Helvetica,Arial,sans-serif;font-weight:400;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}pre{-moz-osx-font-smoothing:auto;-webkit-font-smoothing:auto;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace!important;line-height:19px}h1,h2,h3{font-weight:600}.docon{font-family:docons;font-size:inherit;display:inline-block;font-style:normal;font-weight:400;font-variant:normal;text-transform:none;text-align:center;direction:ltr;line-height:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}@font-face{font-family:docons;src:url(data:application/font-woff2;base64,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) format("woff2");font-weight:400;font-style:normal}@-webkit-keyframes spinAround{0%{transform:rotate(0deg)}to{transform:rotate(359deg)}}@keyframes spinAround{0%{transform:rotate(0deg)}to{transform:rotate(359deg)}}@-webkit-keyframes dots{0%,20%{left:0;-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out;opacity:0}25%,75%{opacity:1}35%{left:45%;-webkit-animation-timing-function:linear;animation-timing-function:linear}65%{left:55%;-webkit-animation-timing-function:ease-in;animation-timing-function:ease-in}80%,to{left:100%;opacity:0}}@keyframes dots{0%,20%{left:0;-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out;opacity:0}25%,75%{opacity:1}35%{left:45%;-webkit-animation-timing-function:linear;animation-timing-function:linear}65%{left:55%;-webkit-animation-timing-function:ease-in;animation-timing-function:ease-in}80%,to{left:100%;opacity:0}}@-webkit-keyframes orbit{0%{transform:rotate(225deg);opacity:1;-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}7%{transform:rotate(345deg);-webkit-animation-timing-function:linear;animation-timing-function:linear}30%{transform:rotate(455deg);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}39%{transform:rotate(690deg);-webkit-animation-timing-function:linear;animation-timing-function:linear}70%{transform:rotate(815deg);opacity:1;-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}75%{transform:rotate(945deg);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}76%,to{transform:rotate(945deg);opacity:0}}@keyframes orbit{0%{transform:rotate(225deg);opacity:1;-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}7%{transform:rotate(345deg);-webkit-animation-timing-function:linear;animation-timing-function:linear}30%{transform:rotate(455deg);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}39%{transform:rotate(690deg);-webkit-animation-timing-function:linear;animation-timing-function:linear}70%{transform:rotate(815deg);opacity:1;-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}75%{transform:rotate(945deg);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}76%,to{transform:rotate(945deg);opacity:0}}@-webkit-keyframes slideUp{0%{transform:translateY(100%)}70%{transform:translateY(-10%)}to{transform:translateY(0)}}@keyframes slideUp{0%{transform:translateY(100%)}70%{transform:translateY(-10%)}to{transform:translateY(0)}}@-webkit-keyframes slideDown{0%{transform:translateY(-100%)}to{transform:translateY(0)}}@keyframes slideDown{0%{transform:translateY(-100%)}to{transform:translateY(0)}}@-webkit-keyframes slideUpOutFadeOut{to{transform:translateY(-100%);opacity:0}}@keyframes slideUpOutFadeOut{to{transform:translateY(-100%);opacity:0}}@-webkit-keyframes fadeOut{to{opacity:0}}@keyframes fadeOut{to{opacity:0}}@-webkit-keyframes slideLeft{to{transform:translateX(-100%)}}@keyframes slideLeft{to{transform:translateX(-100%)}}@-webkit-keyframes slideRight{to{transform:translateX(100%)}}@keyframes slideRight{to{transform:translateX(100%)}}@-webkit-keyframes scaleIn{0%{transform:scale(0)}30%{transform:scale(0)}75%{transform:scale(1.2)}to{transform:scale(1)}}@keyframes scaleIn{0%{transform:scale(0)}30%{transform:scale(0)}75%{transform:scale(1.2)}to{transform:scale(1)}}@-webkit-keyframes fadeInSpin{0%,50%{opacity:0;right:0;transform:rotate(180deg)}to{opacity:1;right:105%;transform:rotate(0deg)}}@keyframes fadeInSpin{0%,50%{opacity:0;right:0;transform:rotate(180deg)}to{opacity:1;right:105%;transform:rotate(0deg)}}@-webkit-keyframes shake{0%{transform:translateX(-10px)}20%{transform:translateX(10px)}50%{transform:translateX(-10px)}70%{transform:translateX(10px)}to{transform:translateX(0)}}@keyframes shake{0%{transform:translateX(-10px)}20%{transform:translateX(10px)}50%{transform:translateX(-10px)}70%{transform:translateX(10px)}to{transform:translateX(0)}}@-webkit-keyframes pulse{0%{background-color:rgba(165,165,165,.1)}50%{background-color:rgba(165,165,165,.3)}to{background-color:rgba(165,165,165,.1)}}@keyframes pulse{0%{background-color:rgba(165,165,165,.1)}50%{background-color:rgba(165,165,165,.3)}to{background-color:rgba(165,165,165,.1)}}@-webkit-keyframes boop{0%{transform:scale(1)}50%{transform:scale(1.1)}to{transform:scale(1)}}@keyframes boop{0%{transform:scale(1)}50%{transform:scale(1.1)}to{transform:scale(1)}}html *,html a,html li{outline-color:inherit}.codeHeader{box-sizing:content-box;background-color:var(--theme-body-background-dark);color:var(--theme-text);display:flex;flex-direction:row;font-size:.8rem;border:1px solid var(--theme-border);border-bottom:0;margin-top:16px;min-height:30px}.codeHeader>.language{padding:2px 16px;flex-grow:1}.codeHeader>.action{padding:2px 10px;background-color:transparent;border:0 solid var(--theme-border);border-left-width:1px;color:var(--theme-text);cursor:pointer;display:flex;align-items:center;line-height:normal}.codeHeader>.action:hover{background-color:hsla(0,0%,98%,1);background-color:var(--theme-body-background-medium)}.codeHeader>.action .successful-copy-alert.is-transparent{opacity:0;transition:opacity .5s ease-in-out}.codeHeader+pre{margin-top:0}.content :not(.codeHeader)+pre>code{margin-top:-16px}.content :not(.codeHeader)+pre>code:before{display:block;height:31px;box-sizing:border-box;margin:-16px -16px 16px;padding:5px 16px;content:" ";font-weight:400;font-size:.8rem;line-height:160%;color:hsla(0,0%,9%,1);color:var(--theme-text);background-color:hsla(0,0%,95%,1);background-color:var(--theme-body-background-dark);border-bottom:1px solid hsla(0,0%,89%,1);border-bottom:1px solid var(--theme-border)}a{color:var(--theme-primary-base);cursor:pointer;text-decoration:none;word-wrap:break-word}a:hover{color:hsla(206,100%,28%,1);color:var(--theme-primary-hover);text-decoration:underline}a:visited{color:hsla(280,100%,30%,1);color:var(--theme-visited)}a:active{color:hsla(206,100%,20%,1);color:var(--theme-primary-active)}a,li{outline:0}code{direction:ltr;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace}button{color:var(--theme-text);background-color:var(--theme-body-background)}:not(a):not(pre)>code{padding:.1em .2em;background-color:hsla(0,0%,89%,.995);background-color:var(--theme-inline-code);border-radius:3px;font-size:85%;font-smooth:auto;word-wrap:break-word}pre{font-size:.875rem;overflow:auto;border:1px solid var(--theme-border);background-color:var(--theme-body-background-medium);padding:1rem;margin:1rem 0 0;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;-moz-tab-size:4;-o-tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none;-webkit-overflow-scrolling:touch}pre>code{position:relative;border:0;padding:0;display:block;line-height:19px}input[type=search]{border:1px solid var(--theme-border);-webkit-appearance:none;-moz-appearance:none;outline:none;background-color:var(--theme-body-background)}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}strong{font-weight:600}html{font-size:16px;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-y:scroll;text-rendering:optimizeLegibility;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;box-sizing:border-box;min-height:100vh}html *,html :after,html :before{box-sizing:inherit}body{display:flex;flex-direction:column;flex:1 1 100%;background-color:var(--theme-body-background);color:var(--theme-text);line-height:160%;min-height:100vh}.mainContainer .right-container{padding-top:1.5rem}.js-focus-visible .has-default-focus :focus:not(.focus-visible){outline:none}.has-default-focus .focus-visible.has-inner-focus{outline-offset:-.125rem;outline-color:currentColor}.content img{border:0}.content img{max-width:100%;height:auto;display:inline-block}.content ul ul{margin:0;margin-left:20px}.content h1:first-of-type{margin-top:-10px;margin-bottom:0}.content h2{margin-bottom:12px}.content h1{line-height:1.3;margin-bottom:12px;font-size:calc(1.41667rem + 1.11111vw);margin-top:0;word-wrap:break-word;word-break:break-word}@media (min-width:1200px){.content h1{font-size:2.25rem}}.content h2{font-size:calc(1.375rem + .83333vw);margin-top:32px}@media (min-width:1200px){.content h2{font-size:2rem}}.content p{margin-top:1rem;margin-bottom:0;word-wrap:break-word}.content ul{margin-left:38px}.content ul>li{list-style:disc outside none}.content ul>li>ul>li{list-style-type:circle}.docon-link:before{content:"\E71B"}.docon-search:before{content:"\E721"}.docon-check-mark:before{content:"\E73E"}.docon-dislike:before{content:"\E8E0"}.docon-like:before{content:"\E8E1"}.docon-world:before{content:"\E909"}.docon-single-bookmark:before{content:"\EDFF"}.docon-dictionary-download:before{content:"\F72F"}.docon-filter-settings:before{content:"\F76C"}.docon-sharing:before{content:"\FF0B"}.docon-edit-outline:before{content:"\FF0F"}.docon-sun:before{content:"\FF10"}.docon-edit-copy:before{content:"\FF1D"}.docon-chevron-down-light:before{content:"\FF33"}.docon-chevron-right-light:before{content:"\FF34"}.hljs-comment{color:#008000}.hljs-built_in,.hljs-keyword{color:#0101fd}.hljs-literal{color:#07704a}.hljs-string{color:#a31515}.hljs-meta{color:#007d9a}.autocomplete{display:inline-block;position:relative}.autocomplete-input{padding-right:26px}.breadcrumbs{width:100%;background:var(--theme-body-background-medium);font-size:.875rem;margin-bottom:0;padding:0 1rem}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (max-width:767.9px),screen and (max-width:767px),screen and (min-resolution:120dpi) and (max-width:767.9px){.breadcrumbs{border-bottom:1px solid var(--theme-border)}}.breadcrumbs>li{display:inline}.breadcrumbs>li:not(:last-of-type):after{content:"/"}.breadcrumbs>li:after{display:inline;margin:0 6px;color:hsla(0,0%,67%,1);color:var(--theme-secondary-base)}@media print,screen and (min-width:768px){.breadcrumbs{padding:0;background:none;width:auto}.breadcrumbs>li{display:inline-block}}@supports (display:grid){.card .card-content p.card-content-description{-webkit-line-clamp:4;max-height:inherit!important;padding-bottom:0!important}.card .card-content p.card-content-description:after{display:none}}.metadata{color:var(--theme-text-subtle);font-size:.875rem}.metadata.page-metadata{display:flex;flex-wrap:wrap;list-style:none;margin:0!important;padding:.125rem 0 0 0!important}.metadata.page-metadata>li{list-style:none;display:flex;flex-basis:auto;align-items:center}.metadata.page-metadata>li:not(:last-of-type):not(:only-of-type):after{padding-left:5px;padding-right:5px;content:"•"}.metadata.page-metadata>li:first-of-type,.metadata.page-metadata>li:only-of-type{margin-left:0}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (max-width:767.9px),screen and (max-width:767px),screen and (min-resolution:120dpi) and (max-width:767.9px){.metadata.page-metadata>li:last-of-type{margin-left:0}}.footerContainer{width:100%;margin:1.5rem 0 0;border-top:1px solid var(--theme-border-white-high-contrast)}.footer-layout{background-color:var(--theme-secondary-background);display:flex;flex-direction:column;padding:3rem 1rem 3rem}@media screen and (min-width:1088px){.footer-layout{flex-direction:row;justify-content:space-between}}.footer-layout .links{font-size:.875rem;margin-bottom:0;display:inline-block;margin-top:1rem}@media screen and (min-width:1088px){.footer-layout .links{margin-top:0}}.footer-layout .links>li{display:inline-block;margin:.25rem 1.5rem 0 0}.footer-layout .links>li a{color:var(--theme-text)}.footer-layout .links>li a:active,.footer-layout .links>li a:hover{color:hsla(0,0%,37%,1);color:var(--theme-text-subtle)}.footer-layout .links>li button{background-color:transparent;border:none;padding:0}.footer-layout .links>li button:active,.footer-layout .links>li button:hover{text-decoration:underline}.locale-selector-link{color:var(--theme-text);font-size:.875rem;display:flex;align-items:center}.locale-selector-link:hover{color:hsla(0,0%,37%,1);color:var(--theme-text-subtle);text-decoration:none}.locale-selector-link:hover .local-selector-link-text{text-decoration:underline}.theme-dropdown-trigger:hover{background-color:transparent!important}.tree{position:relative;font-size:.875rem}.tree ul,ul.tree{list-style-type:none;margin-bottom:0}.tree-item.is-leaf{color:hsla(0,0%,9%,1)!important;color:var(--theme-text)!important}.tree-item.is-expanded>.tree-group{display:block}.tree-group{margin-left:1rem}.tree-expander,.tree-item.is-leaf{display:block;padding-left:1rem;padding-top:2px;padding-bottom:2px}.tree-item:not(.is-leaf){outline:none!important}.tree-expander,.tree-item.is-leaf{outline-offset:-.125rem!important}.tree-expander{position:relative;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}.tree-expander-indicator{display:inline-block;position:absolute;top:7px;left:3px;color:var(--theme-text-subtle);font-size:.55rem;font-weight:600;transition:transform .15s ease-in-out;transform:rotate(0deg)}.tree-item.is-expanded>.tree-expander>.tree-expander-indicator{transform:rotate(90deg)}.tree-item.is-selected{color:hsla(0,0%,9%,.999)!important;color:var(--theme-text-glow-high-contrast)!important;font-weight:600;background-color:var(--theme-body-background-dark)}.binary-rating-redesign .thumb-rating-update.is-selected .docon-dislike:before,.binary-rating-redesign .thumb-rating-update:hover .docon-dislike:before,.thumb-rating.is-selected .docon-dislike:before,.thumb-rating:hover .docon-dislike:before{content:"\F3C0"}.binary-rating-redesign .thumb-rating-update.is-selected .docon-like:before,.binary-rating-redesign .thumb-rating-update:hover .docon-like:before,.thumb-rating.is-selected .docon-like:before,.thumb-rating:hover .docon-like:before{content:"\F3BF"}.thumb-rating{height:auto;border:none}.thumb-rating .icon{color:var(--theme-primary-base)}.nav-bar{position:relative;display:flex;align-items:stretch;height:54px;min-height:54px;justify-content:space-between}@media print,screen and (min-width:768px){.nav-bar{padding-left:1rem;padding-right:1rem}}@media print,screen and (min-width:860px){.nav-bar{padding-left:24px;padding-right:24px}}@media print,screen and (min-width:1084px){.nav-bar{padding-left:5vw;padding-right:5vw}}@media print,screen and (min-width:1795px){.nav-bar{padding-left:calc(50% - 800px);padding-right:calc(50% - 800px)}}.nav-bar>:first-child,.nav-bar>:first-child>:first-child{padding-left:.5rem}@media print,screen and (min-width:768px){.nav-bar>:first-child,.nav-bar>:first-child>:first-child{padding-left:0!important}}.nav-bar-nav{display:none;align-items:stretch}@media print,screen and (min-width:768px){.nav-bar-nav{display:flex}}.nav-bar-nav-list{display:flex;align-items:stretch}.nav-bar-item{display:flex;align-items:center;flex-shrink:0}.nav-bar-item.is-category{margin:0 .5rem}.nav-bar-item.is-category>.is-title{padding-left:.5rem}.nav-bar-item.is-category:before{content:"";display:inline-block;height:1.5rem;border-left:2px solid hsla(0,0%,37%,1);border-left:2px solid var(--theme-text-subtle);margin-left:.5rem;margin-right:1rem}.nav-bar-search{display:flex;align-items:center;flex-grow:1;flex-shrink:1;padding-left:.25rem;margin-right:0}@media print,screen and (min-width:768px){.nav-bar-search{padding:0;flex-grow:0;flex-shrink:0}}@media screen and (min-width:1088px){.nav-bar-search{margin-right:.25rem}}.nav-bar-search .nav-bar-search-form{display:flex;padding-left:.25rem}@media print,screen and (min-width:768px){.nav-bar-search .nav-bar-search-form{padding-left:0}}.nav-bar-button{display:flex;align-items:center;justify-content:center;align-self:stretch;flex-shrink:0;flex-grow:0;min-width:54px;padding:0 .5rem;background-color:transparent;color:var(--theme-text);border:none;text-decoration:none!important;white-space:nowrap;font-size:.875rem;line-height:normal;cursor:pointer;outline-offset:-.125rem!important}.nav-bar-button.is-active,.nav-bar-button:active,.nav-bar-button:hover{color:hsla(0,0%,9%,1);color:var(--theme-text)}.nav-bar-button.focus-visible.has-hover-underline:not([aria-expanded=true])>:first-child,.nav-bar-button.is-active.has-hover-underline:not([aria-expanded=true])>:first-child,.nav-bar-button:active.has-hover-underline:not([aria-expanded=true])>:first-child,.nav-bar-button:hover.has-hover-underline:not([aria-expanded=true])>:first-child{position:relative}.nav-bar-button.focus-visible.has-hover-underline:not([aria-expanded=true])>:first-child:after,.nav-bar-button.is-active.has-hover-underline:not([aria-expanded=true])>:first-child:after,.nav-bar-button:active.has-hover-underline:not([aria-expanded=true])>:first-child:after,.nav-bar-button:hover.has-hover-underline:not([aria-expanded=true])>:first-child:after{content:"";display:block;position:absolute;border-bottom:2px solid hsla(0,0%,9%,1);border-bottom:2px solid var(--theme-text);left:0;right:0;bottom:-.125rem}.nav-bar-button:visited{color:hsla(0,0%,9%,1);color:var(--theme-text)}.nav-bar-button.is-title{font-size:1rem;word-break:break-word;padding:0;background-color:var(--theme-body-background);line-height:normal}@media print,screen and (min-width:768px){.nav-bar-button.is-title{font-size:1.125rem;font-weight:600;line-height:1.125;margin:0;padding:0 .5rem}}.nav-bar-button-chevron{margin-left:auto;padding-left:.25rem;font-size:.75rem;color:var(--theme-text-subtle)}.nav-bar-button-chevron .docon{vertical-align:sub}.nav-bar-brand{display:flex}.nav-bar-spacer{display:none;flex-grow:1;flex-shrink:1}@media print,screen and (min-width:768px){.nav-bar-spacer{display:block}}.nav-bar-logo{width:108px;height:23px}.nav-bar-list{display:flex}.nav-bar-profile{padding-left:.25rem;font-size:.875rem;display:none;align-items:center;flex-shrink:0}@media print,screen and (min-width:768px){.nav-bar-profile{display:flex}}.nav-bar-profile .docs-sign-in{color:var(--theme-primary-base);border:1px solid transparent;border-radius:2px;height:2.25em;line-height:1.5;padding-bottom:calc(.375em - 1px);padding-left:.75em;padding-right:.75em;padding-top:calc(.375em - 1px);position:relative;align-self:center}.nav-bar-profile .docs-sign-in:hover{background-color:hsla(0,0%,98%,1);background-color:var(--theme-body-background-medium)}.facepile{display:flex;flex-wrap:wrap}.facepile.is-small{font-size:1.5rem}.facepile-item{list-style:none!important;padding-right:.25rem}.facepile-item-coin{border-radius:290486px;overflow:hidden;display:flex;width:1em;height:1em}.facepile-item-coin:hover{text-decoration:none}.facepile-item-coin-image{width:100%}.facepile-item-coin-text{margin:auto;font-size:.5em;line-height:1;display:inline-flex;width:100%;height:100%;justify-content:center;align-items:center;text-transform:uppercase}.facepile-item-more{display:block;padding:0;background-color:var(--theme-secondary-base);border-radius:290486px;overflow:hidden;border:1px solid var(--theme-border-white-high-contrast)}.facepile-item-more .facepile-item-coin-text{color:var(--theme-secondary-invert)}.dropdown{position:relative}.button{border-width:1px;cursor:pointer;justify-content:center;padding-bottom:calc(.375em - 1px);padding-left:.75em;padding-right:.75em;padding-top:calc(.375em - 1px);text-align:center;white-space:nowrap}.button:not(.is-text),.button:not(.is-text-primary){text-decoration:none!important}.button .icon{width:1.5em}.button .icon:first-child:last-child{margin-left:calc(-.375em - 1px);margin-right:calc(-.375em - 1px)}.button .icon:first-child:not(:last-child){margin-left:calc(-.375em - 1px);margin-right:.1875em}.button .icon:last-child:not(:first-child){margin-left:.1875em;margin-right:calc(-.375em - 1px)}.button.has-inner-focus:not(.is-text){outline-color:currentColor}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (max-width:1087.9px),screen and (max-width:1087px),screen and (min-resolution:120dpi) and (max-width:1087.9px){.button.is-icon-only-touch .icon{margin:0!important}}.button.is-hovered,.button:hover{border-color:hsla(0,0%,18%,1);border-color:var(--theme-hover-base);color:hsla(0,0%,9%,1);color:var(--theme-text);background-color:hsla(0,0%,98%,.998);background-color:var(--theme-hover-invert)}.button.focus-visible,.button.is-active,.button.is-focused,.button:active,.button:visited{color:hsla(0,0%,9%,1);color:var(--theme-text)}.button.is-active,.button:active{border-color:hsla(0,0%,9%,1);border-color:var(--theme-text)}.button.is-text{background-color:transparent;border-color:transparent;color:var(--theme-text);text-decoration:underline}.button.is-text.focus-visible,.button.is-text.is-focused,.button.is-text.is-hovered,.button.is-text:hover{background-color:hsla(0,0%,98%,1);background-color:var(--theme-body-background-medium);color:hsla(0,0%,9%,1);color:var(--theme-text)}.button.is-text:visited{color:hsla(0,0%,9%,1);color:var(--theme-text)}.button.is-text.is-active,.button.is-text:active{background-color:hsla(0,0%,95%,1);background-color:var(--theme-body-background-dark);color:hsla(0,0%,9%,1);color:var(--theme-text)}.button.is-text.has-inner-focus{outline-color:var(--theme-text)}.button.is-transparent{background-color:transparent;border-color:transparent;color:currentColor}.button.is-transparent:hover{border-color:currentColor;background-color:rgba(255,255,255,.05)}.button.is-transparent:visited{color:currentColor}.button.is-transparent:active{border-color:currentColor;background-color:rgba(255,255,255,.1)}.button.is-primary{background-color:var(--theme-primary-base);border-color:var(--theme-primary-base);color:var(--theme-primary-invert)}.button.is-primary.is-hovered,.button.is-primary:hover{background-color:hsla(206,100%,28%,1);background-color:var(--theme-primary-hover);border-color:hsla(0,0%,0%,0);border-color:var(--theme-border-yellow-high-contrast)}.button.is-primary.is-hovered,.button.is-primary:hover,.button.is-primary:visited{color:hsla(0,0%,100%,.997);color:var(--theme-primary-invert)}.button.is-primary.focus-visible,.button.is-primary.is-active,.button.is-primary.is-focused,.button.is-primary:active{border-color:hsla(0,0%,100%,0);border-color:var(--theme-border-white-high-contrast);color:hsla(0,0%,100%,.997);color:var(--theme-primary-invert)}.button.is-primary.is-active,.button.is-primary:active{background-color:hsla(206,100%,20%,1);background-color:var(--theme-primary-active)}.button.is-small{border-radius:2px;font-size:.875rem}.button.is-small .icon{height:.875rem}.button.is-fullwidth{display:flex;width:100%}.icon{align-items:center;display:inline-flex;justify-content:center;height:1.5rem;width:1.5rem}.input{background-color:var(--theme-body-background);border-color:var(--theme-border);color:hsla(0,0%,9%,1)!important;color:var(--theme-text)!important;box-shadow:inset 0 1px 2px var(--theme-box-shadow-light);max-width:100%;width:100%}.input::-moz-placeholder,.textarea::-moz-placeholder{color:hsla(0,0%,37%,1);color:var(--theme-text-subtle)}.input::-webkit-input-placeholder,.textarea::-webkit-input-placeholder{color:hsla(0,0%,37%,1);color:var(--theme-text-subtle)}.input:-moz-placeholder,.textarea:-moz-placeholder{color:hsla(0,0%,37%,1);color:var(--theme-text-subtle)}.input.is-hovered,.input:hover,.textarea.is-hovered,.textarea:hover{border-color:hsla(206,100%,35%,1);border-color:var(--theme-primary-base)}.input.focus-visible,.input.is-active,.input.is-focused,.input:active,.textarea.focus-visible,.textarea.is-active,.textarea.is-focused,.textarea:active{border-color:hsla(206,100%,35%,1);border-color:var(--theme-primary-base);outline-color:hsla(206,100%,35%,1);outline-color:var(--theme-primary-base);outline-style:solid!important;outline-offset:0!important}.input.focus-visible,.input.is-active,.input.is-focused,.input:active,.textarea.focus-visible,.textarea.is-active,.textarea.is-focused,.textarea:active{box-shadow:0 0 0 .125rem hsla(206,100%,35%,1);box-shadow:0 0 0 .125rem var(--theme-primary-base);outline:none!important}.input.is-small{border-radius:2px;font-size:.875rem}.control{font-size:1rem;position:relative;text-align:left}.control.has-icons-left .input.is-small~.icon{font-size:.875rem}.control.has-icons-left .icon{color:var(--theme-secondary-background);height:2.25em;pointer-events:none;position:absolute;top:0;width:2.25em;z-index:4}.control.has-icons-left .input{padding-left:2.25em}.control.has-icons-left .icon.is-left{left:0}h2.heading-anchor{position:relative;line-height:1.3;padding-left:.9375rem;margin-left:-.9375rem}@media print,screen and (min-width:768px){h2.heading-anchor{padding-left:1.875rem;margin-left:-1.875rem}}h2.heading-anchor .anchor-link{font-size:1rem;width:.75rem;position:absolute;left:0;transform:translateY(-50%) scale(.75);transition:opacity .1s linear}@media print,screen and (min-width:768px){h2.heading-anchor .anchor-link{width:1.5rem;transform:translateY(-50%) scale(1)}}h2.heading-anchor .anchor-link:hover,h3.heading-anchor .anchor-link:hover,h4.heading-anchor .anchor-link:hover,h5.heading-anchor .anchor-link:hover,h6.heading-anchor .anchor-link:hover{text-decoration:none}h2.heading-anchor:not(:hover) .anchor-link:not(.focus-visible),h3.heading-anchor:not(:hover) .anchor-link:not(.focus-visible),h4.heading-anchor:not(:hover) .anchor-link:not(.focus-visible),h5.heading-anchor:not(:hover) .anchor-link:not(.focus-visible),h6.heading-anchor:not(:hover) .anchor-link:not(.focus-visible){border:0;clip:rect(1px,1px,1px,1px);-webkit-clip-path:inset(50%);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal;opacity:0}h2.heading-anchor .anchor-link{top:1.3rem}@-webkit-keyframes moveIndeterminate{0%{background-position:200% 0}to{background-position:-200% 0}}@keyframes moveIndeterminate{0%{background-position:200% 0}to{background-position:-200% 0}}.hero .hero-body,.uhf-container:not(.has-padding){margin-right:auto;margin-left:auto;max-width:100%}@media screen and (max-width:859px){.hero .hero-body,.uhf-container:not(.has-padding){max-width:calc(100% - 32px);width:calc(100% - 32px)}}@media print,screen and (min-width:860px){.hero .hero-body,.uhf-container:not(.has-padding){max-width:calc(100% - 48px);width:calc(100% - 48px)}}@media print,screen and (min-width:1084px){.hero .hero-body,.uhf-container:not(.has-padding){max-width:calc(100% - 10vw);width:calc(100% - 10vw)}}@media print,screen and (min-width:1795px){.hero .hero-body,.uhf-container:not(.has-padding){margin-right:auto;margin-left:auto;max-width:1600px;width:1600px}}.has-padding.uhf-container{box-sizing:border-box;width:100%;margin-right:0;margin-left:0}@media screen and (max-width:859px){.has-padding.uhf-container{padding-right:0;padding-left:0}.has-padding.uhf-container>*{padding-right:16px;padding-left:16px}}@media print,screen and (min-width:860px){.has-padding.uhf-container{padding-right:24px;padding-left:24px}}@media print,screen and (min-width:1084px){.has-padding.uhf-container{padding-right:5vw;padding-left:5vw}}@media print,screen and (min-width:1795px){.has-padding.uhf-container{padding-left:calc(50% - 800px);padding-right:calc(50% - 800px)}}.has-top-padding.uhf-container{padding-top:1.5rem}#affixed-left-container{z-index:1}.header-holder{flex-shrink:0}.mainContainer{flex-grow:1;flex-shrink:1}.mainContainer .left-container,.mainContainer .primary-holder{padding-top:1.5rem}.columns>.column{display:block;flex-basis:0;flex-grow:1;flex-shrink:1}.columns>.column:not(.has-uhf-padding){padding:.75rem}.columns.has-large-gaps>.column{padding:1.5rem}@media print,screen and (min-width:768px){.column.is-full{flex:none;width:100%}.column.is-two-thirds-tablet{flex:none;width:66.6666%}.column.is-one-third-tablet{flex:none;width:33.3333%}.column.is-one-quarter{flex:none;width:25%}}@media screen and (min-width:1088px){.column.is-three-quarters-desktop{flex:none;width:75%}.column.is-one-quarter-desktop{flex:none;width:25%}.column.is-one-fifth-desktop{flex:none;width:20%}.column.is-four-fifths-desktop{flex:none;width:80%}}.columns:last-child{margin-bottom:-.75rem}.columns:not(:last-child){margin-bottom:.75rem}.columns.has-large-gaps{margin-left:-1.5rem;margin-right:-1.5rem;margin-top:-1.5rem}.columns.has-large-gaps:last-child{margin-bottom:-1.5rem}.columns.has-large-gaps:not(:last-child){margin-bottom:0}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (max-width:767.9px),screen and (max-width:767px),screen and (min-resolution:120dpi) and (max-width:767.9px){.columns.is-gapless-mobile{margin-left:0;margin-right:0;margin-top:0}.columns.is-gapless-mobile>.column:not(.has-uhf-padding){margin:0;padding:0!important}.columns.is-gapless-mobile:not(:last-child){margin-bottom:1.5rem}.columns.is-gapless-mobile:last-child{margin-bottom:0}}@media print,screen and (min-width:768px){.columns:not(.is-desktop){display:flex}}@supports (display:grid){.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));grid-column-gap:1rem;row-gap:1rem;margin:0;padding:0}.grid>.grid-item{display:flex;align-content:stretch;align-items:stretch}.grid>.grid-item>*{width:100%;height:100%}.grid>.grid-item.is-decorative:last-child:nth-child(2n){display:none!important}@media only screen and (min-width:628px) and (max-width:949px){.grid>.grid-item.is-decorative:last-child:nth-child(2n){display:flex!important}}.grid.is-horizontal{grid-template-columns:none;-moz-column-gap:0;column-gap:0;row-gap:.5rem}.grid.is-2.is-mobile{grid-template-columns:1fr 1fr!important}@media print,screen and (min-width:768px){.grid.is-2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}}@media screen and (min-width:1088px){.grid.is-2{grid-template-columns:repeat(2,1fr)}}@media print,screen and (min-width:768px){.grid.is-3{grid-template-columns:repeat(auto-fit,minmax(25%,1fr))}}@media screen and (min-width:1088px){.grid.is-3-desktop{grid-template-columns:repeat(auto-fit,minmax(25%,1fr))}}@media print,screen and (min-width:768px){.grid.is-4{grid-template-columns:repeat(auto-fit,minmax(20%,1fr))}}.grid:not(.is-horizontal):not(.is-2)>.grid-item:only-child{max-width:308px}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (min-width:768px) and (max-width:1087.9px),screen and (min-resolution:120dpi) and (min-width:768px) and (max-width:1087.9px),screen and (min-width:768px) and (max-width:1087px){.grid.has-min-width-170-tablet-only{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}}.grid.is-fibonacci{grid-template-columns:1fr}@media print,screen and (min-width:768px){.grid.is-fibonacci{grid-template-columns:repeat(2,1fr)}}@media screen and (min-width:1088px){.grid.is-fibonacci{grid-template-columns:repeat(4,1fr)}}.is-small{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}.content-header{margin:0;border-bottom:1px solid var(--theme-border)}@media screen and (-webkit-min-device-pixel-ratio:1.25) and (max-width:767.9px),screen and (max-width:767px),screen and (min-resolution:120dpi) and (max-width:767.9px){.content-header{padding:0}}@media print,screen and (min-width:768px){.content-header{display:flex;align-items:center;justify-content:space-between;margin:0}}.doc-outline h3{font-size:1rem;margin:0;margin-top:16px}@media print,screen and (min-width:768px){.doc-outline h3{margin-top:0}}.doc-outline h3:last-child{display:none}.doc-outline ol{margin:10px 0 0;list-style-type:none}.doc-outline ol li{list-style:none}.doc-outline li{line-height:1.3;font-size:.875rem;padding:2px 0;padding-left:7px;margin:4px 0}.doc-outline a:visited{color:hsla(206,100%,35%,1);color:var(--theme-primary-base)}#main{position:relative}.skip-to-main-link{z-index:1070!important}#headerAreaHolder{line-height:normal;border-bottom:1px solid var(--theme-border)}svg:not(:root){overflow:hidden}button{overflow:visible}button{cursor:pointer}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}.erL690_8JwUW-R4bJRcfl:enabled:hover{color:#000;background-color:#DBDBDB;box-shadow:0px 4px 10px rgba(0,0,0,0.25);border:none}.erL690_8JwUW-R4bJRcfl:enabled:focus{background-color:#DBDBDB;box-shadow:0px 4px 10px rgba(0,0,0,0.25);border:2px solid #000}.erL690_8JwUW-R4bJRcfl:disabled{opacity:1;color:rgba(0,0,0,0.2);background-color:rgba(0,0,0,0.2);border:none}._23tra1HsiiP6cT-Cka-ycB{position:relative;display:flex;z-index:9999;width:100%;justify-content:space-between;text-align:left}._1Upc2NjY8AlDn177YoVj0y{margin:0;padding-left:5%;padding-top:8px;padding-bottom:8px}._23tra1HsiiP6cT-Cka-ycB svg{fill:none;max-width:none;max-height:none}._1V_hlU-7jdtPiooHMu89BB{display:table-cell;padding:12px;width:24px;height:24px;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:24px;line-height:0}.f6QKJD7fhSbnJLarTL-W-{display:table-cell;vertical-align:middle;padding:0;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:13px;line-height:16px}.f6QKJD7fhSbnJLarTL-W- a{text-decoration:underline}._2j0fmugLb1FgYz6KPuB91w{display:inline-block;margin-left:5%;margin-right:5%;min-width:calc((150px + 3 * 4px) * 2 + 150px);min-width:-webkit-fit-content;min-width:-moz-fit-content;align-self:center;position:relative}._1XuCi2WhiqeWRUVp3pnFG3{margin:4px;padding:5px;min-width:150px;min-height:36px;vertical-align:top;cursor:pointer;font-family:Segoe UI,SegoeUI,Arial,sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px;text-align:center}._1XuCi2WhiqeWRUVp3pnFG3:focus{box-sizing:border-box}._1XuCi2WhiqeWRUVp3pnFG3:disabled{cursor:not-allowed}._23tra1HsiiP6cT-Cka-ycB *::before,._2bvsb3ubApyZ0UGoQA9O9T *::before,._23tra1HsiiP6cT-Cka-ycB *::after,._2bvsb3ubApyZ0UGoQA9O9T *::after{box-sizing:inherit}@media only screen and (max-width:768px){._2j0fmugLb1FgYz6KPuB91w,._1Upc2NjY8AlDn177YoVj0y{padding-top:8px;padding-bottom:12px;padding-left:3.75%;padding-right:3.75%;margin:0;width:92.5%}._23tra1HsiiP6cT-Cka-ycB{display:block}._1XuCi2WhiqeWRUVp3pnFG3{margin-bottom:8px;margin-left:0;margin-right:0;width:100%}}@media only screen and (max-height:260px),only screen and (max-width:340px){._1XuCi2WhiqeWRUVp3pnFG3{min-width:0}}._23tra1HsiiP6cT-Cka-ycB{background-color:#F2F2F2!important}.w8hcgFksdo30C8w-bygqu{color:#000000!important}.ydkKdaztSS0AeHWIeIHsQ a{color:#0067B8!important}.erL690_8JwUW-R4bJRcfl{border:none!important;background-color:#EBEBEB!important;color:#000000!important}.erL690_8JwUW-R4bJRcfl:enabled:hover{color:#000000!important;background-color:#DBDBDB!important;box-shadow:0px 4px 10px rgba(0,0,0,0.25)!important;border:none!important}.erL690_8JwUW-R4bJRcfl:enabled:focus{background-color:#DBDBDB!important;box-shadow:0px 4px 10px rgba(0,0,0,0.25)!important;border:2px solid #000000!important}.erL690_8JwUW-R4bJRcfl:disabled{opacity:1!important;color:rgba(0,0,0,0.2)!important;background-color:rgba(0,0,0,0.2)!important;border:none!important}</style><meta itemprop=position content=1 class=sf-hidden><meta itemprop=position content=2 class=sf-hidden><meta itemprop=position content=3 class=sf-hidden><meta itemprop=position content=4 class=sf-hidden><meta itemprop=position content=5 class=sf-hidden><meta itemprop=position content=6 class=sf-hidden><link type=image/x-icon rel="shortcut icon" href="data:image/x-icon;base64,AAABAAYAgIAQAAAAAABoKAAAZgAAAEhIEAAAAAAA6A0AAM4oAAAwMBAAAAAAAGgGAAC2NgAAICAQAAAAAADoAgAAHj0AABgYEAAAAAAA6AEAAAZAAAAQEBAAAAAAACgBAADuQQAAKAAAAIAAAAAAAQAAAQAEAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A76QAAAC5/wAAun8AIlDyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAAzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAADMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVAAAARERERERERERERERERERERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQAAAEREREREREREREREREREREREREREREREREREREREREVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUAAABERERERERERERERERERERERERERERERERERERERERAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAAAAAAAAAAAfgAAAAAAAAAAAAAAAAAAAH4AAAAAAAAAAAAAAAAAAAB+AAAAAAAAAAKAAAAEgAAACQAAAAAQAEAAAAAACADQAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A76QAAAC5/wAAun8AIlDyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMiIiIiIiIiIiIiIiIiIiIiIgAAMzMzMzMzMzMzMzMzMzMzMzMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAARERERERERERERERERERERERVVVVVVVVVVVVVVVVVVVVVVQAAREREREREREREREREREREREQAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAD///////////8AAAD///////////8AAAD///////////8AAAD///////////8AAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAAoAAAAMAAAAGAAAAABAAQAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wDvpAAAALn/AAC6fwAiUPIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMyIiIiIiIiIiIiIiIAMzMzMzMzMzMzMzMwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERFVVVVVVVVVVVVVVUARERERERERERERERAAAAYAAAAAAAAABgAAAAAAAAAGAAAAAAAAAAYAAAAAAAAABgAAA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"><style>.sf-hidden{display:none!important}</style></head>
+<body dir=ltr lang=en-us>
+<div class="header-holder has-default-focus">
+ <a href=#main class="skip-to-main-link has-outline-color-text visually-hidden-until-focused is-fixed has-inner-focus focus-visible has-top-zero has-left-zero has-right-zero has-padding-medium has-text-centered has-body-background-medium" tabindex=1>Skip to main content</a>
+ <div id=cookie-consent-holder><div id=wcpConsentBannerCtrl class=_23tra1HsiiP6cT-Cka-ycB dir=ltr role=alert>
+ <div class=_1Upc2NjY8AlDn177YoVj0y>
+ <span class="_1V_hlU-7jdtPiooHMu89BB w8hcgFksdo30C8w-bygqu">
+ <svg xmlns=http://www.w3.org/2000/svg x=0px y=0px viewBox="0 0 44 44" width=24px height=24px fill=none stroke=currentColor>
+ <circle cx=22 cy=22 r=20 stroke-width=2></circle>
+ <line x1=22 x2=22 y1=18 y2=33 stroke-width=3></line>
+ <line x1=22 x2=22 y1=12 y2=15 stroke-width=3></line>
+ </svg>
+ </span> 
+ <p class="f6QKJD7fhSbnJLarTL-W- ydkKdaztSS0AeHWIeIHsQ w8hcgFksdo30C8w-bygqu">
+ We use cookies to improve your experience on our websites and for advertising. <a target=_blank href="https://go.microsoft.com/fwlink/?LinkId=521839">Privacy Statement</a>
+ </p>
+ </div>
+ <div class=_2j0fmugLb1FgYz6KPuB91w>
+ <button type=button class="_1XuCi2WhiqeWRUVp3pnFG3 erL690_8JwUW-R4bJRcfl">Accept all</button>
+ <button type=button class="_1XuCi2WhiqeWRUVp3pnFG3 erL690_8JwUW-R4bJRcfl">Manage cookies</button>
+ </div>
+ </div></div>
+ 
+ <div id=headerAreaHolder data-bi-name=header>
+<header role=banner itemscope itemtype=http://schema.org/Organization> <div class=nav-bar> <div class=nav-bar-brand>
+ <a class=nav-bar-button itemprop=url href=https://www.microsoft.com/ aria-label=Microsoft>
+ <div class=nav-bar-logo role=presentation aria-hidden=true itemprop=logo itemscope>
+ <svg xmlns=http://www.w3.org/2000/svg width=108 height=23 viewBox="72 72 337 74" preserveAspectRatio="xMidYMin slice">
+ <g data-name=MS-symbol>
+ <clippath id=a>
+ <path transform="matrix(1 0 0 -1 0 216)" d="M0 216h482V0H0z"></path>
+ </clippath>
+ <g clip-path=url(#a)>
+ <path class="has-fill-current-color has-text-subtle" d="M394.942 104.59h-10.858v25.003h-7.38V104.59h-5.182v-5.965h5.182v-4.308c0-3.254 1.06-5.92 3.178-7.998 2.12-2.079 4.835-3.118 8.15-3.118.882 0 1.666.045 2.35.135a9.37 9.37 0 011.806.407v6.296c-.24-.14-.663-.31-1.265-.512-.603-.2-1.296-.3-2.078-.3-1.528 0-2.702.476-3.526 1.43-.824.954-1.235 2.365-1.235 4.232v3.736h10.858v-6.959l7.321-2.229v9.188h7.381v5.965h-7.38v14.49c0 1.91.345 3.254 1.038 4.037.693.783 1.782 1.175 3.27 1.175.42 0 .927-.1 1.52-.3a7.178 7.178 0 001.552-.724v6.025c-.463.261-1.23.502-2.305.723a15.742 15.742 0 01-3.178.331c-3.073 0-5.378-.817-6.914-2.455-1.537-1.637-2.305-4.102-2.305-7.396zm-48.407 9.73c0 3.233.733 5.703 2.2 7.411 1.465 1.707 3.564 2.56 6.295 2.56 2.652 0 4.67-.853 6.055-2.56 1.386-1.708 2.08-4.238 2.08-7.592 0-3.334-.719-5.849-2.155-7.547-1.436-1.697-3.45-2.545-6.04-2.545-2.67 0-4.745.888-6.22 2.666-1.477 1.777-2.215 4.313-2.215 7.607m-7.592.24c0-5.12 1.446-9.177 4.338-12.17 2.892-2.993 6.91-4.489 12.05-4.489 4.841 0 8.621 1.441 11.343 4.323 2.721 2.883 4.082 6.774 4.082 11.674 0 5.021-1.447 9.018-4.338 11.99-2.892 2.973-6.829 4.458-11.81 4.458-4.8 0-8.61-1.41-11.432-4.232-2.822-2.82-4.233-6.673-4.233-11.554m-16.417-7.802c0 1.045.331 1.863.994 2.456.662.592 2.128 1.34 4.398 2.243 2.912 1.166 4.956 2.476 6.131 3.932 1.175 1.456 1.762 3.22 1.762 5.287 0 2.912-1.12 5.252-3.359 7.02-2.24 1.767-5.267 2.65-9.083 2.65-1.285 0-2.706-.155-4.263-.467-1.556-.31-2.877-.707-3.96-1.19v-7.169a17.945 17.945 0 004.277 2.198c1.526.543 2.911.814 4.157.814 1.647 0 2.862-.23 3.645-.693.784-.46 1.175-1.235 1.175-2.319 0-1.005-.406-1.853-1.22-2.546-.813-.693-2.355-1.492-4.624-2.395-2.69-1.125-4.599-2.39-5.724-3.796-1.125-1.406-1.687-3.193-1.687-5.362 0-2.792 1.11-5.086 3.33-6.884 2.217-1.797 5.095-2.696 8.63-2.696 1.084 0 2.3.12 3.645.361 1.346.242 2.47.553 3.374.934v6.93c-.964-.644-2.089-1.195-3.374-1.658-1.286-.462-2.56-.693-3.826-.693-1.386 0-2.465.271-3.238.813-.774.543-1.16 1.286-1.16 2.23m-35.066 7.562c0 3.233.733 5.703 2.2 7.411 1.465 1.707 3.564 2.56 6.295 2.56 2.652 0 4.67-.853 6.055-2.56 1.386-1.708 2.08-4.238 2.08-7.592 0-3.334-.719-5.849-2.155-7.547-1.436-1.697-3.449-2.545-6.039-2.545-2.672 0-4.745.888-6.222 2.666-1.476 1.777-2.214 4.313-2.214 7.607m-7.592.24c0-5.12 1.446-9.177 4.338-12.17 2.893-2.993 6.91-4.489 12.051-4.489 4.84 0 8.621 1.441 11.342 4.323 2.721 2.883 4.082 6.774 4.082 11.674 0 5.021-1.446 9.018-4.338 11.99-2.892 2.973-6.828 4.458-11.809 4.458-4.8 0-8.61-1.41-11.433-4.232-2.822-2.82-4.233-6.673-4.233-11.554m-3.136-16.448c.582 0 1.105.041 1.567.121.462.08.853.18 1.175.301v7.38c-.382-.28-.939-.546-1.672-.798-.733-.25-1.622-.376-2.666-.376-1.788 0-3.299.753-4.534 2.26-1.235 1.505-1.853 3.825-1.853 6.958v15.635h-7.29V98.624h7.29v4.88h.12c.663-1.687 1.667-3.007 3.013-3.96 1.346-.954 2.962-1.432 4.85-1.432m-27.956 26.18c1.084 0 2.28-.25 3.585-.754a15.06 15.06 0 003.615-1.988v6.778c-1.165.663-2.485 1.165-3.962 1.506-1.475.342-3.098.512-4.865.512-4.559 0-8.265-1.44-11.116-4.323-2.852-2.88-4.278-6.562-4.278-11.04 0-4.98 1.456-9.083 4.37-12.307 2.91-3.224 7.037-4.835 12.38-4.835 1.366 0 2.746.176 4.143.527 1.395.352 2.504.758 3.328 1.22v6.99c-1.125-.824-2.274-1.462-3.45-1.914a9.966 9.966 0 00-3.599-.678c-2.872 0-5.192.934-6.959 2.802-1.768 1.868-2.652 4.388-2.652 7.562 0 3.132.85 5.573 2.546 7.32 1.697 1.748 4.002 2.621 6.914 2.621m-22.112 5.302h-7.29V98.624h7.29zm-8.044-39.916c0-1.205.437-2.214 1.311-3.028.874-.813 1.913-1.22 3.118-1.22 1.285 0 2.35.417 3.193 1.25.844.834 1.266 1.833 1.266 2.998 0 1.185-.432 2.18-1.296 2.982-.864.804-1.918 1.205-3.163 1.205-1.246 0-2.295-.406-3.148-1.219-.854-.815-1.28-1.803-1.28-2.968m-6.274-3.284v43.2h-7.5v-33.86h-.12l-13.408 33.86h-4.97l-13.738-33.86h-.09v33.86h-6.929v-43.2h10.755l12.412 32.024h.18l13.105-32.024z"></path>
+ <path d="M106.214 106.214H71.996V71.996h34.218z" fill=#f25022></path>
+ <path d="M143.993 106.214h-34.218V71.996h34.218z" fill=#7fba00></path>
+ <path d="M106.214 143.993H71.996v-34.218h34.218z" fill=#00a4ef></path>
+ <path d="M143.993 143.993h-34.218v-34.218h34.218z" fill=#ffb900></path>
+ </g>
+ </g>
+ </svg>
+ </div>
+ </a>
+ </div> 
+ 
+ <div class="nav-bar-item is-hidden-tablet sf-hidden">
+ 
+ </div>
+ 
+ 
+ <nav class=nav-bar-nav role=navigation aria-label=Global>
+ <ul class=nav-bar-nav-list>
+ 
+ <li class="nav-bar-item is-category">
+ <a class="nav-bar-button is-title has-hover-underline" itemprop=url href=https://docs.microsoft.com/en-us/>
+ <span>Docs</span>
+ </a>
+ </li>
+ 
+ <li class=nav-bar-item>
+ <a class="nav-bar-button has-hover-underline is-active" href=https://docs.microsoft.com/en-us/documentation>
+ <span>Documentation</span>
+ </a>
+ </li> <li class=nav-bar-item>
+ <a class="nav-bar-button has-hover-underline" href=https://docs.microsoft.com/en-us/learn/>
+ <span>Learn</span>
+ </a>
+ </li> <li class=nav-bar-item>
+ <a class="nav-bar-button has-hover-underline" href=https://docs.microsoft.com/en-us/answers/products/>
+ <span>Q&amp;A</span>
+ </a>
+ </li> <li class=nav-bar-item>
+ <a class="nav-bar-button has-hover-underline" href=https://docs.microsoft.com/en-us/samples/browse/>
+ <span>Code Samples</span>
+ </a>
+ </li> <li class="dropdown nav-bar-item sf-hidden" hidden>
+ 
+ 
+ </li>
+ </ul>
+ </nav>
+ 
+ <span class=nav-bar-spacer></span>
+ 
+ <div class="nav-bar-search sf-hidden" id=ax-84 hidden>
+ 
+ 
+ 
+ </div>
+ 
+ <div class=nav-bar-search>
+ 
+ 
+ <form class=nav-bar-search-form method=GET name=nav-bar-search-form role=search id=nav-bar-search-form-desktop aria-label=Search aria-expanded=false action=/en-us/search/>
+ <div class=autocomplete data-bi-name=autocomplete> <div class="control has-icons-left">
+ <input role=combobox maxlength=100 aria-autocomplete=list autocapitalize=off autocomplete=off autocorrect=off spellcheck=false id=ax-86 class="autocomplete-input input control has-icons-left is-small" type=search name=terms aria-expanded=false aria-owns=ax-87-listbox aria-activedescendant aria-label=Search placeholder=Search value>
+ <span aria-hidden=true class="icon is-small is-left">
+ <span class="has-text-primary docon docon-search"></span>
+ </span>
+ <span aria-hidden=true class="autocomplete-loader loader has-text-primary sf-hidden" hidden></span>
+ </div>
+ <ul class="autocomplete-suggestions is-vertically-scrollable sf-hidden" role=listbox id=ax-87-listbox aria-label=ax-86-suggestions hidden>
+ 
+ </ul></div>
+ 
+ <button type=submit class=visually-hidden tabindex=-1 aria-hidden=true></button>
+ <input name=category value class=sf-hidden hidden>
+ <input name=scope value=Desktop class=sf-hidden hidden>
+ 
+ 
+ </form>
+ 
+ </div>
+ 
+ <div class="nav-bar-search sf-hidden" hidden>
+ 
+ </div>
+ 
+ 
+ <div class=nav-bar-profile>
+ 
+ <a class="docs-sign-in auth-status-determined not-authenticated" href=#> Sign in </a>
+ 
+ <div class="dropdown has-caret auth-status-determined authenticated sf-hidden">
+ 
+ 
+ </div>
+ 
+ </div>
+ 
+ </div> <div class="nav-bar has-border-top is-hidden-mobile"> 
+ <a class="nav-bar-button is-title has-hover-underline" itemprop=url href=https://docs.microsoft.com/windows/apps>
+ <span>
+ Windows Developer
+ 
+ </span>
+ </a>
+ 
+ 
+ <nav class=nav-bar-nav role=navigation aria-label=Site>
+ <ul class=nav-bar-nav-list>
+ 
+ <li class="dropdown nav-bar-item">
+ <button aria-expanded=false class="dropdown-trigger nav-bar-button has-hover-underline" aria-controls=ax-88>
+ <span>Explore</span>
+ <span class=nav-bar-button-chevron aria-hidden=true>
+ <span class="docon docon-chevron-down-light expanded-indicator"></span>
+ </span>
+ </button>
+ <ul class="dropdown-menu sf-hidden" id=ax-88 aria-label=Explore>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </ul>
+ </li> <li class="dropdown nav-bar-item">
+ <button aria-expanded=false class="dropdown-trigger nav-bar-button has-hover-underline" aria-controls=ax-89>
+ <span>Platforms</span>
+ <span class=nav-bar-button-chevron aria-hidden=true>
+ <span class="docon docon-chevron-down-light expanded-indicator"></span>
+ </span>
+ </button>
+ <ul class="dropdown-menu sf-hidden" id=ax-89 aria-label=Platforms>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </ul>
+ </li> <li class=nav-bar-item>
+ <a class="has-external-link-indicator nav-bar-button has-hover-underline" href=https://developer.microsoft.com/windows/downloads>
+ <span>Downloads</span>
+ </a>
+ </li> <li class=nav-bar-item>
+ <a class="has-external-link-indicator nav-bar-button has-hover-underline" href=https://developer.microsoft.com/windows/samples>
+ <span>Samples</span>
+ </a>
+ </li> <li class=nav-bar-item>
+ <a class="has-external-link-indicator nav-bar-button has-hover-underline" href=https://developer.microsoft.com/windows/support>
+ <span>Support</span>
+ </a>
+ </li> <li class="dropdown nav-bar-item sf-hidden" hidden>
+ 
+ 
+ </li>
+ </ul>
+ </nav>
+ 
+ <span class=nav-bar-spacer></span>
+ 
+ <ol class=nav-bar-list>
+ 
+ <li class=nav-bar-item>
+ <a class="button is-small is-primary" href=https://partner.microsoft.com/dashboard>
+ Dashboard
+ </a>
+ </li>
+ 
+ </ol>
+ 
+ </div> </header>	</div>
+ <div class="content-header uhf-container has-padding has-default-focus has-border-bottom-none" data-bi-name=content-header>
+ <nav class="has-padding-none has-padding-left-medium-tablet has-padding-right-medium-tablet has-padding-left-none-uhf-tablet has-padding-none-desktop has-flex-grow" data-bi-name=breadcrumb itemscope itemtype=http://schema.org/BreadcrumbList role=navigation aria-label=Breadcrumb>
+ <ul id=page-breadcrumbs class=breadcrumbs>
+ <li itemprop=itemListElement itemscope itemtype=http://schema.org/ListItem>
+ 
+ <a itemprop=item href=https://docs.microsoft.com/en-us/windows/>
+ <span itemprop=name>Windows</span>
+ </a>
+ 
+ 
+ </li>
+ 
+ <li itemprop=itemListElement itemscope itemtype=http://schema.org/ListItem>
+ 
+ <a itemprop=item href=https://docs.microsoft.com/en-us/windows/apps/>
+ <span itemprop=name>Apps</span>
+ </a>
+ 
+ 
+ </li>
+ 
+ <li itemprop=itemListElement itemscope itemtype=http://schema.org/ListItem>
+ 
+ <a itemprop=item href=https://docs.microsoft.com/en-us/windows/win32/>
+ <span itemprop=name>Win32</span>
+ </a>
+ 
+ 
+ </li>
+ 
+ <li itemprop=itemListElement itemscope itemtype=http://schema.org/ListItem>
+ 
+ <a itemprop=item href=https://docs.microsoft.com/en-us/windows/win32/desktop-app-technologies>
+ <span itemprop=name>Desktop Technologies</span>
+ </a>
+ 
+ 
+ </li>
+ 
+ <li itemprop=itemListElement itemscope itemtype=http://schema.org/ListItem>
+ 
+ <a itemprop=item href=https://docs.microsoft.com/en-us/windows/win32/system-services>
+ <span itemprop=name>System Services</span>
+ </a>
+ 
+ 
+ </li>
+ 
+ <li itemprop=itemListElement itemscope itemtype=http://schema.org/ListItem>
+ 
+ <a itemprop=item href=https://docs.microsoft.com/en-us/windows/win32/ipc/interprocess-communications>
+ <span itemprop=name>Interprocess Communications</span>
+ </a>
+ 
+ 
+ </li>
+ </ul>
+ </nav>
+ <div class="content-header-controls sf-hidden">
+ 
+ 
+ </div>
+ <div class="has-padding-none-tablet has-padding-medium is-size-small is-flex-touch has-flex-justify-content-space-between-touch has-flex-grow">
+ <ul class="is-hidden-mobile action-list has-flex-justify-content-start has-flex-justify-content-end-tablet is-flex is-flex-row has-flex-wrap has-flex-grow is-unstyled">
+ <li>
+ <button type=button class="bookmark button is-text has-inner-focus is-small is-icon-only-touch" data-list-type=bookmarks data-bi-name=bookmark title="Add bookmark for Named Pipe Client - Win32 apps | Microsoft Docs" aria-pressed=false>
+ <span class=icon aria-hidden=true>
+ <span class="docon docon-single-bookmark"></span>
+ </span>
+ <span class="bookmark-status is-visually-hidden-touch is-hidden-portrait">Bookmark</span>
+ </button>
+ </li>
+ <li id=contenteditbtn>
+ <a href=https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ipc/named-pipe-client.md class="button is-text has-inner-focus is-icon-only-touch is-small" title="Edit This Document" data-bi-name=edit data-original_content_git_url=https://github.com/MicrosoftDocs/win32-pr/blob/live/desktop-src/ipc/named-pipe-client.md data-original_content_git_url_template={repo}/blob/{branch}/desktop-src/ipc/named-pipe-client.md data-pr_repo data-pr_branch>
+ <span class=icon aria-hidden=true>
+ <span class="docon docon-edit-outline"></span>
+ </span>
+ <span class="is-visually-hidden-touch is-hidden-portrait">Edit</span>
+ </a>
+ </li>
+ <li>
+<div class="sharing dropdown has-caret">
+ <button class="dropdown-trigger button is-text is-fullwidth has-flex-justify-content-start has-inner-focus is-small is-icon-only-touch" aria-controls=sharing-menu aria-expanded=false title="Share This Document" data-bi-name=share>
+ <span class=icon aria-hidden=true>
+ <span class="docon docon-sharing"></span>
+ </span>
+ <span class="is-visually-hidden-touch is-hidden-portrait">Share</span>
+ </button>
+ <div class="dropdown-menu has-padding-small sf-hidden" id=sharing-menu>
+ 
+ </div>
+</div> </li>
+ </ul>
+ <button type=button class="has-border contents-button button is-small is-text is-hidden-tablet has-inner-focus sf-hidden" aria-label=Contents data-bi-name=contents-expand>
+ 
+ 
+ </button>
+ <div class=is-invisible></div>
+ <div class="is-hidden-tablet level-item is-flexible level-right sf-hidden">
+ 
+ </div>
+ </div>
+ </div>
+ <div id=disclaimer-holder class="has-overflow-hidden has-default-focus">
+ 
+ </div>
+ </div>
+ <div class="mainContainer uhf-container has-top-padding has-default-focus" data-bi-name=body>
+ <div class="columns has-large-gaps is-gapless-mobile">
+ <div id=left-container class="left-container is-hidden-mobile column is-one-third-tablet is-one-quarter-desktop">
+ <nav id=affixed-left-container class="is-fixed is-flex is-flex-column" role=navigation aria-label=Primary style=width:204.767px;top:228.5px;bottom:24px data-bi-name="left toc"><form action=javascript: role=search aria-label=Search class=has-margin-bottom-small><label class=visually-hidden for=ax-71>Search</label><div class="autocomplete is-block" data-bi-name=autocomplete> <div class="control has-icons-left">
+ <input role=combobox maxlength=100 aria-autocomplete=list autocapitalize=off autocomplete=off autocorrect=off spellcheck=false id=ax-71 class="autocomplete-input input control has-icons-left is-full-width is-small" type=text aria-expanded=false aria-owns=ax-72-listbox aria-activedescendant placeholder="Filter by title" value>
+ <span aria-hidden=true class="icon is-small is-left">
+ <span class="has-text-primary docon docon-filter-settings"></span>
+ </span>
+ <span aria-hidden=true class="autocomplete-loader loader has-text-primary sf-hidden" hidden></span>
+ </div>
+ <ul class="autocomplete-suggestions is-vertically-scrollable sf-hidden" role=listbox id=ax-72-listbox aria-label=ax-71-suggestions hidden>
+ 
+ </ul></div></form><ul class="tree is-vertically-scrollable has-flex-grow has-flex-shrink" role=tree aria-label="Table of contents" data-bi-name=tree data-is-collapsible=true><li role=none><a aria-setsize=4 aria-level=1 aria-posinset=1 role=treeitem tabindex=-1 class="tree-item is-leaf has-external-link-indicator" data-bi-name=tree-leaf href=https://docs.microsoft.com/en-us/windows/win32/ipc/interprocess-communications>Interprocess Communications</a><li class=tree-item aria-setsize=4 aria-level=1 aria-posinset=2 role=treeitem tabindex=-1 id=title-2-1 aria-expanded=false><span data-bi-name=tree-expander class=tree-expander><span class="tree-expander-indicator docon docon-chevron-right-light" aria-hidden=true></span>Mailslots</span><li class=tree-item aria-setsize=4 aria-level=1 aria-posinset=3 role=treeitem tabindex=-1 id=title-3-1 aria-expanded=false><span data-bi-name=tree-expander class=tree-expander><span class="tree-expander-indicator docon docon-chevron-right-light" aria-hidden=true></span>Network Dynamic Data Exchange</span><li class="tree-item is-expanded" aria-setsize=4 aria-level=1 aria-posinset=4 role=treeitem tabindex=-1 id=title-4-1 aria-expanded=true><span data-bi-name=tree-expander class=tree-expander><span class="tree-expander-indicator docon docon-chevron-right-light" aria-hidden=true></span>Pipes</span><ul class=tree-group role=group><li role=none><a aria-setsize=4 aria-level=2 aria-posinset=1 role=treeitem tabindex=-1 class="tree-item is-leaf has-external-link-indicator" data-bi-name=tree-leaf href=https://docs.microsoft.com/en-us/windows/win32/ipc/pipes>Pipes</a><li class=tree-item aria-setsize=4 aria-level=2 aria-posinset=2 role=treeitem tabindex=-1 id=title-4-1_2-2 aria-expanded=false><span data-bi-name=tree-expander class=tree-expander><span class="tree-expander-indicator docon docon-chevron-right-light" aria-hidden=true></span>About Pipes</span><li class="tree-item is-expanded" aria-setsize=4 aria-level=2 aria-posinset=3 role=treeitem tabindex=-1 id=title-4-1_3-2 aria-expanded=true><span data-bi-name=tree-expander class=tree-expander><span class="tree-expander-indicator docon docon-chevron-right-light" aria-hidden=true></span>Using Pipes</span><ul class=tree-group role=group><li role=none><a aria-setsize=6 aria-level=3 aria-posinset=1 role=treeitem tabindex=-1 class="tree-item is-leaf has-external-link-indicator" data-bi-name=tree-leaf href=https://docs.microsoft.com/en-us/windows/win32/ipc/using-pipes>Using Pipes</a><li role=none><a aria-setsize=6 aria-level=3 aria-posinset=2 role=treeitem tabindex=-1 class="tree-item is-leaf has-external-link-indicator" data-bi-name=tree-leaf href=https://docs.microsoft.com/en-us/windows/win32/ipc/multithreaded-pipe-server>Multithreaded Pipe Server</a><li role=none><a aria-setsize=6 aria-level=3 aria-posinset=3 role=treeitem tabindex=-1 class="tree-item is-leaf has-external-link-indicator" data-bi-name=tree-leaf href=https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipe-server-using-overlapped-i-o>Named Pipe Server Using Overlapped I/O</a><li role=none><a aria-setsize=6 aria-level=3 aria-posinset=4 role=treeitem tabindex=-1 class="tree-item is-leaf has-external-link-indicator" data-bi-name=tree-leaf href=https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipe-server-using-completion-routines>Named Pipe Server Using Completion Routines</a><li role=none><a aria-setsize=6 aria-level=3 aria-posinset=5 role=treeitem tabindex=0 class="tree-item is-leaf has-external-link-indicator is-selected" data-bi-name=tree-leaf href=https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipe-client aria-current=page>Named Pipe Client</a><li role=none><a aria-setsize=6 aria-level=3 aria-posinset=6 role=treeitem tabindex=-1 class="tree-item is-leaf has-external-link-indicator" data-bi-name=tree-leaf href=https://docs.microsoft.com/en-us/windows/win32/ipc/transactions-on-named-pipes>Transactions on Named Pipes</a></ul><li class=tree-item aria-setsize=4 aria-level=2 aria-posinset=4 role=treeitem tabindex=-1 id=title-4-1_4-2 aria-expanded=false><span data-bi-name=tree-expander class=tree-expander><span class="tree-expander-indicator docon docon-chevron-right-light" aria-hidden=true></span>Pipe Reference</span></ul></ul><a class="button is-small is-text has-flex-justify-content-start has-inner-focus has-margin-top-small has-border-top has-border-bottom has-flex-shrink-none" href="https://docs.microsoft.com/en-us/windows/win32/opbuildpdf/ipc/toc.pdf?branch=live" data-bi-name=downloadPdf rel=nofollow> <span class="icon is-size-extra-small has-text-subtle">
+ <span aria-hidden=true class="docon docon-dictionary-download"></span>
+ </span>
+ <span>Download PDF</span></a></nav>
+ </div>
+ <section class="primary-holder column is-two-thirds-tablet is-three-quarters-desktop">
+ <div class="columns is-gapless-mobile has-large-gaps">
+ <div id=main-column class="column is-full is-four-fifths-desktop">
+ <main id=main role=main class=content data-bi-name=content dir=ltr lang=en-us>
+ <h1 id=named-pipe-client>Named Pipe Client</h1>
+ <ul class="metadata page-metadata" data-bi-name="page info" dir=ltr lang=en-us>
+ <li>
+ <time data-article-date aria-label="Article review date" datetime=2018-05-31T00:00:00.000Z data-article-date-source=ms.date>05/31/2018</time>
+ </li>
+ <li class=readingTime>3 minutes to read</li>
+ <li class=contributors-holder>
+ <ul class="facepile has-margin-left-none is-small" data-bi-name=contributors>
+ <li class=facepile-item>
+ <a href=https://github.com/mcleanbyron title=mcleanbyron aria-label="mcleanbyronGithub profile" data-src="https://github.com/mcleanbyron.png?size=32" data-contributor-name=mcleanbyron class=facepile-item-coin>
+ <img class="facepile-item-coin-image durable-image" aria-hidden=true src="data:image/jpeg;base64,/9j/2wCEAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDIBCQkJDAsMGA0NGDIhHCEyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMv/AABEIACAAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/AO1OiOB0rjPGPiGLwxJHaxwrPeSLv2lsKi+p+vpXo+oXttYQCWa5cJuC8j1NeezWFpq3iK8vrmwt7uG4l8uOaY8gKgAAUjgfKfzrrxGY+zhdPU58JgXWqcvQ5IfEaZLQs+mxtOD1VyFx9OtXtP1Jtet01KULC5UxlUBIABP59ab4u8IwW+mvqdvYpZJGcSxRSF1Zf7wz0IrP8J3kEWh37szCC0w4B68jkH1yf6VwVcZOvS30Oz6osPUs0QXvxHmnlkH2TemCIt8pJBx1NXPCWtXuoXiQ3srpLuZ0O7YDkAYxWdo3hWObTYr9BuDrnJ5IPf6fhVsWE0Ei3TiBI94Tyi2SQcfnU1KcWmuo6VScJKSNDxpqL3GlTadbzSOxmUkFuqjj9T/I155HNeQWs1qjOIpWBdV/iIzjNdVFA15K9tCrFoZGO2MbjI3VefTkflVmHT4dKhvNQul2ReUPLGQSznoB+J/nRSgqceUK05VZczP/2Q==" role=presentation>
+ <span class="facepile-item-coin-text durable-image-fallback facepile-item-teal sf-hidden" aria-hidden=true>m</span>
+ </a>
+ </li>
+ <li class=facepile-item>
+ <a href=https://github.com/v-kents title=v-kents aria-label="v-kentsGithub profile" data-src="https://github.com/v-kents.png?size=32" data-contributor-name=v-kents class=facepile-item-coin>
+ <img class="facepile-item-coin-image durable-image" aria-hidden=true src="data:image/jpeg;base64,/9j/2wCEAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDIBCQkJDAsMGA0NGDIhHCEyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMv/AABEIACAAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/APJRNv1FLe3XG4kDHcnvV688M6lpx82GZWVlzwccVW8PxrdeK1iQA5JCZr0i48N317fFCkcVvgKjhxg+vAyfzxQnZKxpTgpLU87ttXgfEYjZJFA+bPfof6frW1p927vPvGUKgj8M5rXvPhparLzc3kEoGSYrNpVP05FZuo+Hr7RIkljmuJ7JF+dinkuGJwAVJJxyOfeiSU1aRE6TtY6nSfBGj6Lqv22O6aecA4UlVUZ9uv61sXFyvltGjiMjr83OPavNdW1i8lheZbuNXAyEVSTn05xXM/8ACQ6h5uGnYdjjrQ4SjuioTh9k9dvtVjtkhZvIA24P2i6k5+ijOfxrmNf1RbqL7PaRwjz1wWWIKeoIPc/rXDPdl4/Mkld5mbO4vk4q4bXV7tLaW3gl2ykhHOFDfQmoadip1PdZ/9k=" role=presentation>
+ <span class="facepile-item-coin-text durable-image-fallback facepile-item-red sf-hidden" aria-hidden=true>v</span>
+ </a>
+ </li>
+ <li class=facepile-item>
+ <a href=https://github.com/DCtheGeek title=DCtheGeek aria-label="DCtheGeekGithub profile" data-src="https://github.com/DCtheGeek.png?size=32" data-contributor-name=DCtheGeek class=facepile-item-coin>
+ <img class="facepile-item-coin-image durable-image" aria-hidden=true src="data:image/jpeg;base64,/9j/2wCEAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDIBCQkJDAsMGA0NGDIhHCEyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMv/AABEIACAAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/APAo4pJpBHEjO56KoyT+FX4vD+rzDK6fOP8AfXb/ADroPAds13cSQ2dibrUHbCYKjauM5yxAHQkn0Fd/b6BrdytnLJY/Z7S7B8q5eVHQ46g7CcHrwcdDWUpTvaKN4U6fLecjyGXw9q8IBawmOf7g3fyrNZWRirAqwOCCMEV7pqXhy+t7yGHTI5L1iAjEyRxhpDk7UDMCxwAcDOOPXFebeOrC7tru0uLvTZrN5lZf3oAL7WwfxByKac1K0kTKNPl5oM6v4FajPY6/qarbR3EElsPNRlBPXHGSB3PUjgmvWvEV1dTaLb2WjWa2NtbH5UjhTcowR8qBiuBnPXP9fmTQ9SvtOadrK7mtmkUK7QuVJHpkV1nh22udckvZrzU5tlrGHKyTtlyT25z61reKV2YNSbPcvD9xLaQRvqNkl4VkE0MjwIZY3C7d2CVC5Hoc89PTyP48a5dar4l06CaARRQ2peIHG47mIOcEgfd9TWDdXeo6XfNFFf3CFcMrRTtggjIINYPifVL3Vrq3lv7hp5I4vLV2xnaCTgnvyT1pu3zFB3Saeh//2Q==" role=presentation>
+ <span class="facepile-item-coin-text durable-image-fallback facepile-item-blue sf-hidden" aria-hidden=true>D</span>
+ </a>
+ </li>
+ <li class=facepile-item>
+ <a href=https://github.com/drewbatgit title=drewbatgit aria-label="drewbatgitGithub profile" data-src="https://github.com/drewbatgit.png?size=32" data-contributor-name=drewbatgit class=facepile-item-coin>
+ <img class="facepile-item-coin-image durable-image" aria-hidden=true src="data:image/png;base64,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" role=presentation>
+ <span class="facepile-item-coin-text durable-image-fallback facepile-item-teal sf-hidden" aria-hidden=true>d</span>
+ </a>
+ </li>
+ <li class=facepile-item>
+ <a href=https://github.com/mijacobs title=mijacobs aria-label="mijacobsGithub profile" data-src="https://github.com/mijacobs.png?size=32" data-contributor-name=mijacobs class=facepile-item-coin>
+ <img class="facepile-item-coin-image durable-image" aria-hidden=true src=data:image/jpeg;base64,/9j/2wCEAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDIBCQkJDAsMGA0NGDIhHCEyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMv/AABEIACAAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/APeox8ori/GnjLUdEuV0/RtMN3dlPMd3ViiA5wOOpOPWu1T7orIu7zyprmRHiUKREd4538Y79ORQBxPg34k6lq+vJo2uaWtrLMGMEyKUDEZO0qSewPOe1ejtXDagRH4z0rzFjlvGbKiMHgDr16da7l6AI7vUbPTLQ3N9cxW8K9XkbA+nufavGdd8aadceIr2e2uPtFlKRsLqVA+VQcA/TrXJ67q93q98Zr64eWV8bcngc9AOwqDT3fTZbW5tyPNiII3KGH4g9fSgDsPAupX134vfXtThnFhbwNHAxUk84GRnqMZ6V7BZarY6vaC60+7iuYG/jjbOD6H0Psa8b1L4iy32kPaW2mw280sZSSZGz2wdq4+X8zXHaVquoeH7lbvT7h4ZerjPyuPRh3FAH//Z role=presentation>
+ <span class="facepile-item-coin-text durable-image-fallback facepile-item-red sf-hidden" aria-hidden=true>m</span>
+ </a>
+ </li>
+ <li class=facepile-item>
+ <button aria-label="View all contributors" class=facepile-item-more title="View all contributors">
+ <div class=facepile-item-coin aria-hidden=true>
+ <span class=facepile-item-coin-text aria-hidden=true>
+ +1
+ </span>
+ </div>
+ </button>
+ </li>
+ </ul>
+ </li>
+ </ul>
+ <nav id=center-doc-outline class="doc-outline is-hidden-desktop sf-hidden" data-bi-name="intopic toc" role=navigation aria-label="Article Outline">
+ 
+ </nav>
+ 
+ <p>A named pipe client uses the <a href=https://docs.microsoft.com/en-us/windows/desktop/api/fileapi/nf-fileapi-createfilea data-linktype=absolute-path><strong>CreateFile</strong></a> function to open a handle to a named pipe. If the pipe exists but all of its instances are busy, <strong>CreateFile</strong> returns <strong>INVALID_HANDLE_VALUE</strong> and the <a href=https://docs.microsoft.com/en-us/windows/desktop/api/errhandlingapi/nf-errhandlingapi-getlasterror data-linktype=absolute-path><strong>GetLastError</strong></a> function returns ERROR_PIPE_BUSY. When this happens, the named pipe client uses the <a href=https://docs.microsoft.com/en-us/windows/desktop/api/Winbase/nf-winbase-waitnamedpipea data-linktype=absolute-path><strong>WaitNamedPipe</strong></a> function to wait for an instance of the named pipe to become available.</p>
+<p>The <a href=https://docs.microsoft.com/en-us/windows/desktop/api/fileapi/nf-fileapi-createfilea data-linktype=absolute-path><strong>CreateFile</strong></a> function fails if the access specified is incompatible with the access specified (duplex, outbound, or inbound) when the server created the pipe. For a duplex pipe, the client can specify read, write, or read/write access; for an outbound pipe (write-only server), the client must specify read-only access; and for an inbound pipe (read-only server), the client must specify write-only access.</p>
+<p>The handle returned by <a href=https://docs.microsoft.com/en-us/windows/desktop/api/fileapi/nf-fileapi-createfilea data-linktype=absolute-path><strong>CreateFile</strong></a> defaults to byte-read mode, blocking-wait mode, overlapped mode disabled, and write-through mode disabled. The pipe client can use <strong>CreateFile</strong> to enable overlapped mode by specifying FILE_FLAG_OVERLAPPED or to enable write-through mode by specifying FILE_FLAG_WRITE_THROUGH. The client can use the <a href=https://docs.microsoft.com/en-us/windows/win32/api/namedpipeapi/nf-namedpipeapi-setnamedpipehandlestate data-linktype=absolute-path><strong>SetNamedPipeHandleState</strong></a> function to enable nonblocking mode by specifying PIPE_NOWAIT or to enable message-read mode by specifying PIPE_READMODE_MESSAGE.</p>
+<p>The following example shows a pipe client that opens a named pipe, sets the pipe handle to message-read mode, uses the <a href=https://docs.microsoft.com/en-us/windows/desktop/api/fileapi/nf-fileapi-writefile data-linktype=absolute-path><strong>WriteFile</strong></a> function to send a request to the server, and uses the <a href=https://docs.microsoft.com/en-us/windows/desktop/api/fileapi/nf-fileapi-readfile data-linktype=absolute-path><strong>ReadFile</strong></a> function to read the server's reply. This pipe client can be used with any of the message-type servers listed at the bottom of this topic. With a byte-type server, however, this pipe client fails when it calls <a href=https://docs.microsoft.com/en-us/windows/win32/api/namedpipeapi/nf-namedpipeapi-setnamedpipehandlestate data-linktype=absolute-path><strong>SetNamedPipeHandleState</strong></a> to change to message-read mode. Because the client is reading from the pipe in message-read mode, it is possible for the <strong>ReadFile</strong> operation to return zero after reading a partial message. This happens when the message is larger than the read buffer. In this situation, <a href=https://docs.microsoft.com/en-us/windows/desktop/api/errhandlingapi/nf-errhandlingapi-getlasterror data-linktype=absolute-path><strong>GetLastError</strong></a> returns ERROR_MORE_DATA, and the client can read the remainder of the message using additional calls to <strong>ReadFile</strong>.</p>
+<p>This pipe client can be used with any of the pipe servers listed under See Also.</p>
+<div class=codeHeader id=code-try-0 data-bi-name=code-header><span class=language>C++</span><button type=button class="action is-relative" data-bi-name=copy aria-label="Copy code">
+ <span class=icon>
+ <span class="docon docon-edit-copy" role=presentation></span>
+ </span>
+ <span>Copy</span>
+ <div class="successful-copy-alert is-absolute has-right-zero has-top-zero has-left-zero has-bottom-zero is-flex has-flex-align-items-center has-flex-justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden=true>
+ <span class="icon is-size-large">
+ <span class="docon docon-check-mark" role=presentation></span>
+ </span>
+ </div>
+ </button></div><pre tabindex=0 class=has-inner-focus><code class=lang-C++ data-author-content="#include <windows.h> 
+#include <stdio.h>
+#include <conio.h>
+#include <tchar.h>
+
+#define BUFSIZE 512
+ 
+int _tmain(int argc, TCHAR *argv[]) 
+{ 
+   HANDLE hPipe; 
+   LPTSTR lpvMessage=TEXT(&quot;Default message from client.&quot;); 
+   TCHAR  chBuf[BUFSIZE]; 
+   BOOL   fSuccess = FALSE; 
+   DWORD  cbRead, cbToWrite, cbWritten, dwMode; 
+   LPTSTR lpszPipename = TEXT(&quot;\\\\.\\pipe\\mynamedpipe&quot;); 
+
+   if( argc > 1 )
+      lpvMessage = argv[1];
+ 
+// Try to open a named pipe; wait for it, if necessary. 
+ 
+   while (1) 
+   { 
+      hPipe = CreateFile( 
+         lpszPipename,   // pipe name 
+         GENERIC_READ |  // read and write access 
+         GENERIC_WRITE, 
+         0,              // no sharing 
+         NULL,           // default security attributes
+         OPEN_EXISTING,  // opens existing pipe 
+         0,              // default attributes 
+         NULL);          // no template file 
+ 
+   // Break if the pipe handle is valid. 
+ 
+      if (hPipe != INVALID_HANDLE_VALUE) 
+         break; 
+ 
+      // Exit if an error other than ERROR_PIPE_BUSY occurs. 
+ 
+      if (GetLastError() != ERROR_PIPE_BUSY) 
+      {
+         _tprintf( TEXT(&quot;Could not open pipe. GLE=%d\n&quot;), GetLastError() ); 
+         return -1;
+      }
+ 
+      // All pipe instances are busy, so wait for 20 seconds. 
+ 
+      if ( ! WaitNamedPipe(lpszPipename, 20000)) 
+      { 
+         printf(&quot;Could not open pipe: 20 second wait timed out.&quot;); 
+         return -1;
+      } 
+   } 
+ 
+// The pipe connected; change to message-read mode. 
+ 
+   dwMode = PIPE_READMODE_MESSAGE; 
+   fSuccess = SetNamedPipeHandleState( 
+      hPipe,    // pipe handle 
+      &amp;dwMode,  // new pipe mode 
+      NULL,     // don't set maximum bytes 
+      NULL);    // don't set maximum time 
+   if ( ! fSuccess) 
+   {
+      _tprintf( TEXT(&quot;SetNamedPipeHandleState failed. GLE=%d\n&quot;), GetLastError() ); 
+      return -1;
+   }
+ 
+// Send a message to the pipe server. 
+ 
+   cbToWrite = (lstrlen(lpvMessage)+1)*sizeof(TCHAR);
+   _tprintf( TEXT(&quot;Sending %d byte message: \&quot;%s\&quot;\n&quot;), cbToWrite, lpvMessage); 
+
+   fSuccess = WriteFile( 
+      hPipe,                  // pipe handle 
+      lpvMessage,             // message 
+      cbToWrite,              // message length 
+      &amp;cbWritten,             // bytes written 
+      NULL);                  // not overlapped 
+
+   if ( ! fSuccess) 
+   {
+      _tprintf( TEXT(&quot;WriteFile to pipe failed. GLE=%d\n&quot;), GetLastError() ); 
+      return -1;
+   }
+
+   printf(&quot;\nMessage sent to server, receiving reply as follows:\n&quot;);
+ 
+   do 
+   { 
+   // Read from the pipe. 
+ 
+      fSuccess = ReadFile( 
+         hPipe,    // pipe handle 
+         chBuf,    // buffer to receive reply 
+         BUFSIZE*sizeof(TCHAR),  // size of buffer 
+         &amp;cbRead,  // number of bytes read 
+         NULL);    // not overlapped 
+ 
+      if ( ! fSuccess &amp;&amp; GetLastError() != ERROR_MORE_DATA )
+         break; 
+ 
+      _tprintf( TEXT(&quot;\&quot;%s\&quot;\n&quot;), chBuf ); 
+   } while ( ! fSuccess);  // repeat loop if ERROR_MORE_DATA 
+
+   if ( ! fSuccess)
+   {
+      _tprintf( TEXT(&quot;ReadFile from pipe failed. GLE=%d\n&quot;), GetLastError() );
+      return -1;
+   }
+
+   printf(&quot;\n<End of message, press ENTER to terminate connection and exit>&quot;);
+   _getch();
+ 
+   CloseHandle(hPipe); 
+ 
+   return 0; 
+}
+"><span><span class=hljs-meta>#<span class=hljs-meta-keyword>include</span> <span class=hljs-meta-string>&lt;windows.h&gt; </span></span>
+<span class=hljs-meta>#<span class=hljs-meta-keyword>include</span> <span class=hljs-meta-string>&lt;stdio.h&gt;</span></span>
+<span class=hljs-meta>#<span class=hljs-meta-keyword>include</span> <span class=hljs-meta-string>&lt;conio.h&gt;</span></span>
+<span class=hljs-meta>#<span class=hljs-meta-keyword>include</span> <span class=hljs-meta-string>&lt;tchar.h&gt;</span></span>
+
+<span class=hljs-meta>#<span class=hljs-meta-keyword>define</span> BUFSIZE 512</span>
+ 
+<span class=hljs-keyword>int</span> _tmain(<span class=hljs-keyword>int</span> argc, TCHAR *argv[]) 
+{ 
+   HANDLE hPipe; 
+   LPTSTR lpvMessage=TEXT(<span class=hljs-string>"Default message from client."</span>); 
+   TCHAR  chBuf[BUFSIZE]; 
+   BOOL   fSuccess = FALSE; 
+   DWORD  cbRead, cbToWrite, cbWritten, dwMode; 
+   LPTSTR lpszPipename = TEXT(<span class=hljs-string>"\\\\.\\pipe\\mynamedpipe"</span>); 
+
+   <span class=hljs-keyword>if</span>( argc &gt; <span class=hljs-number>1</span> )
+      lpvMessage = argv[<span class=hljs-number>1</span>];
+ 
+<span class=hljs-comment>// Try to open a named pipe; wait for it, if necessary. </span>
+ 
+   <span class=hljs-keyword>while</span> (<span class=hljs-number>1</span>) 
+   { 
+      hPipe = CreateFile( 
+         lpszPipename,   <span class=hljs-comment>// pipe name </span>
+         GENERIC_READ |  <span class=hljs-comment>// read and write access </span>
+         GENERIC_WRITE, 
+         <span class=hljs-number>0</span>,              <span class=hljs-comment>// no sharing </span>
+         <span class=hljs-literal>NULL</span>,           <span class=hljs-comment>// default security attributes</span>
+         OPEN_EXISTING,  <span class=hljs-comment>// opens existing pipe </span>
+         <span class=hljs-number>0</span>,              <span class=hljs-comment>// default attributes </span>
+         <span class=hljs-literal>NULL</span>);          <span class=hljs-comment>// no template file </span>
+ 
+   <span class=hljs-comment>// Break if the pipe handle is valid. </span>
+ 
+      <span class=hljs-keyword>if</span> (hPipe != INVALID_HANDLE_VALUE) 
+         <span class=hljs-keyword>break</span>; 
+ 
+      <span class=hljs-comment>// Exit if an error other than ERROR_PIPE_BUSY occurs. </span>
+ 
+      <span class=hljs-keyword>if</span> (GetLastError() != ERROR_PIPE_BUSY) 
+      {
+         _tprintf( TEXT(<span class=hljs-string>"Could not open pipe. GLE=%d\n"</span>), GetLastError() ); 
+         <span class=hljs-keyword>return</span> <span class=hljs-number>-1</span>;
+      }
+ 
+      <span class=hljs-comment>// All pipe instances are busy, so wait for 20 seconds. </span>
+ 
+      <span class=hljs-keyword>if</span> ( ! WaitNamedPipe(lpszPipename, <span class=hljs-number>20000</span>)) 
+      { 
+         <span class=hljs-built_in>printf</span>(<span class=hljs-string>"Could not open pipe: 20 second wait timed out."</span>); 
+         <span class=hljs-keyword>return</span> <span class=hljs-number>-1</span>;
+      } 
+   } 
+ 
+<span class=hljs-comment>// The pipe connected; change to message-read mode. </span>
+ 
+   dwMode = PIPE_READMODE_MESSAGE; 
+   fSuccess = SetNamedPipeHandleState( 
+      hPipe,    <span class=hljs-comment>// pipe handle </span>
+      &amp;dwMode,  <span class=hljs-comment>// new pipe mode </span>
+      <span class=hljs-literal>NULL</span>,     <span class=hljs-comment>// don't set maximum bytes </span>
+      <span class=hljs-literal>NULL</span>);    <span class=hljs-comment>// don't set maximum time </span>
+   <span class=hljs-keyword>if</span> ( ! fSuccess) 
+   {
+      _tprintf( TEXT(<span class=hljs-string>"SetNamedPipeHandleState failed. GLE=%d\n"</span>), GetLastError() ); 
+      <span class=hljs-keyword>return</span> <span class=hljs-number>-1</span>;
+   }
+ 
+<span class=hljs-comment>// Send a message to the pipe server. </span>
+ 
+   cbToWrite = (lstrlen(lpvMessage)+<span class=hljs-number>1</span>)*<span class=hljs-keyword>sizeof</span>(TCHAR);
+   _tprintf( TEXT(<span class=hljs-string>"Sending %d byte message: \"%s\"\n"</span>), cbToWrite, lpvMessage); 
+
+   fSuccess = WriteFile( 
+      hPipe,                  <span class=hljs-comment>// pipe handle </span>
+      lpvMessage,             <span class=hljs-comment>// message </span>
+      cbToWrite,              <span class=hljs-comment>// message length </span>
+      &amp;cbWritten,             <span class=hljs-comment>// bytes written </span>
+      <span class=hljs-literal>NULL</span>);                  <span class=hljs-comment>// not overlapped </span>
+
+   <span class=hljs-keyword>if</span> ( ! fSuccess) 
+   {
+      _tprintf( TEXT(<span class=hljs-string>"WriteFile to pipe failed. GLE=%d\n"</span>), GetLastError() ); 
+      <span class=hljs-keyword>return</span> <span class=hljs-number>-1</span>;
+   }
+
+   <span class=hljs-built_in>printf</span>(<span class=hljs-string>"\nMessage sent to server, receiving reply as follows:\n"</span>);
+ 
+   <span class=hljs-keyword>do</span> 
+   { 
+   <span class=hljs-comment>// Read from the pipe. </span>
+ 
+      fSuccess = ReadFile( 
+         hPipe,    <span class=hljs-comment>// pipe handle </span>
+         chBuf,    <span class=hljs-comment>// buffer to receive reply </span>
+         BUFSIZE*<span class=hljs-keyword>sizeof</span>(TCHAR),  <span class=hljs-comment>// size of buffer </span>
+         &amp;cbRead,  <span class=hljs-comment>// number of bytes read </span>
+         <span class=hljs-literal>NULL</span>);    <span class=hljs-comment>// not overlapped </span>
+ 
+      <span class=hljs-keyword>if</span> ( ! fSuccess &amp;&amp; GetLastError() != ERROR_MORE_DATA )
+         <span class=hljs-keyword>break</span>; 
+ 
+      _tprintf( TEXT(<span class=hljs-string>"\"%s\"\n"</span>), chBuf ); 
+   } <span class=hljs-keyword>while</span> ( ! fSuccess);  <span class=hljs-comment>// repeat loop if ERROR_MORE_DATA </span>
+
+   <span class=hljs-keyword>if</span> ( ! fSuccess)
+   {
+      _tprintf( TEXT(<span class=hljs-string>"ReadFile from pipe failed. GLE=%d\n"</span>), GetLastError() );
+      <span class=hljs-keyword>return</span> <span class=hljs-number>-1</span>;
+   }
+
+   <span class=hljs-built_in>printf</span>(<span class=hljs-string>"\n&lt;End of message, press ENTER to terminate connection and exit&gt;"</span>);
+   _getch();
+ 
+   CloseHandle(hPipe); 
+ 
+   <span class=hljs-keyword>return</span> <span class=hljs-number>0</span>; 
+}
+</span></code></pre>
+<h2 id=related-topics class=heading-anchor><a class="anchor-link docon docon-link" href=#related-topics aria-labelledby=related-topics></a>Related topics</h2>
+<dl> <dt>
+<p><a href=https://docs.microsoft.com/en-us/windows/win32/ipc/multithreaded-pipe-server data-linktype=relative-path>Multithreaded pipe server</a></p>
+</dt> <dt>
+<p><a href=https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipe-server-using-overlapped-i-o data-linktype=relative-path>Named pipe server using overlapped I/O</a></p>
+</dt> <dt>
+<p><a href=https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipe-server-using-completion-routines data-linktype=relative-path>Named pipe server using completion routines</a></p>
+</dt> </dl>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+ 
+ </main>
+ 
+ <div class="is-hidden-desktop has-border-top has-margin-top-large has-padding-top-large binary-rating-holder sf-hidden">
+ 
+ 
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ <div class="footerContainer is-visible-interactive has-default-focus sf-hidden">
+ 
+ </div>
+ </div>
+ <div class="is-size-small right-container column is-one-quarter is-one-fifth-desktop is-hidden-mobile is-hidden-tablet-only" data-bi-name=pageactions role=complementary aria-label="Page Actions">
+ <div id=affixed-right-container class="doc-outline is-fixed is-vertically-scrollable" style=width:103.65px;top:228.5px;bottom:24px>
+ 
+ 
+ 
+ <div class="feedback-verbatim has-border-bottom has-padding-bottom-small has-margin-bottom-small" data-bi-name=rating>
+ <div class=binary-rating>
+ <div class=binary-rating-buttons>
+ <h3 class="has-text-weight-semibold has-margin-top-none has-margin-bottom-small">Is this page helpful?</h3>
+ <div>
+ <button class="thumb-rating like has-inner-focus" title=Yes data-bi-name=rating-yes aria-expanded=false data-bi-sat=1 aria-controls=rating-container-mobile>
+ <span aria-hidden=true class="icon docon docon-like"></span>
+ <span>Yes</span>
+ </button>
+ <button class="thumb-rating dislike has-inner-focus" title=No data-bi-name=rating-no data-bi-sat=0 aria-expanded=false aria-controls=rating-container-mobile>
+ <span aria-hidden=true class="icon docon docon-dislike"></span>
+ <span>No</span>
+ </button>
+ </div>
+ </div>
+ <form class="feedback-verbatim-form is-hidden sf-hidden" id=rating-container-mobile>
+ 
+ 
+ </form>
+ </div>
+ <div class="thankyou-rating is-hidden sf-hidden" tabindex=-1>
+ 
+ </div>
+</div> <nav id=side-doc-outline data-bi-name="intopic toc" role=navigation aria-label="Article Outline">
+ <h3>In this article</h3>
+ <ol><li><a href=#related-topics>Related topics</a></ol></nav>
+ </div>
+ </div>
+ 
+ </div>
+ 
+ </section>
+ <aside id=interactive-container class="interactive-container is-visible-interactive column has-body-background-dark sf-hidden">
+ </aside>
+ </div>
+ 
+ </div>
+ <div class="footerContainer has-default-focus is-hidden-interactive">
+ <footer id=footer data-bi-name=footer class="footer-layout uhf-container has-padding" role=contentinfo>
+ <div class="is-flex is-full-height has-padding-right-extra-large-desktop">
+ <a data-mscc-ic=false class="locale-selector-link has-flex-shrink-none" href="https://docs.microsoft.com/en-us/locale?target=https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipe-client" data-bi-name=select-locale><span class="icon docon docon-world is-size-large has-margin-right-small" aria-hidden=true></span><span class=local-selector-link-text>English (United States)</span></a>
+ <div class="has-margin-left-medium has-margin-right-medium has-flex-shrink-none">
+<div class="dropdown has-caret-up">
+ <button class="dropdown-trigger button is-transparent is-small is-icon-only-touch has-inner-focus theme-dropdown-trigger" aria-controls=theme-menu aria-expanded=false title=Theme data-bi-name=theme>
+ <span class=icon>
+ <span class="docon docon-sun" aria-hidden=true></span>
+ </span>
+ <span>Theme</span>
+ </button>
+ <div class="dropdown-menu sf-hidden" id=theme-menu role=menu>
+ 
+ </div>
+</div> </div>
+ </div>
+ <ul class=links data-bi-name=footerlinks>
+ <li class=manage-cookies-holder><button data-bi-name=manageCookies>Manage cookies</button></li>
+ <li><a data-mscc-ic=false href=https://docs.microsoft.com/en-us/previous-versions/ data-bi-name=archivelink>Previous Version Docs</a></li>
+ <li><a data-mscc-ic=false href=https://docs.microsoft.com/en-us/teamblog data-bi-name=bloglink>Blog</a></li>
+ <li><a data-mscc-ic=false href=https://docs.microsoft.com/en-us/contribute data-bi-name=contributorGuide>Contribute</a></li>
+ <li><a data-mscc-ic=false href="https://go.microsoft.com/fwlink/?LinkId=521839" data-bi-name=privacy>Privacy &amp; Cookies</a></li>
+ <li><a data-mscc-ic=false href=https://docs.microsoft.com/en-us/legal/termsofuse data-bi-name=termsofuse>Terms of Use</a></li>
+ <li><a data-mscc-ic=false href=https://aka.ms/sitefeedback data-bi-name=feedback>Site Feedback</a></li>
+ <li><a data-mscc-ic=false href=https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/EN-US.aspx data-bi-name=trademarks>Trademarks</a></li>
+ <li>© Microsoft 2021</li>
+ </ul>
+</footer>
+ </div>
+ <div id=action-panel role=region aria-label="Action Panel" class="action-panel has-default-focus sf-hidden" tabindex=-1></div>
