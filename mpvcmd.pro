@@ -1,17 +1,22 @@
 TEMPLATE = app
 TARGET = mpvcmd
-CONFIG = c++11
-DEFINES =
+CONFIG = c99 link_pkgconfig
+DEFINES = _GNU_SOURCE
 INCLUDEPATH =
+PKGCONFIG =
+
+PKGCONFIG += tinyc
 
 HEADERS =
 
 SOURCES = \
-    0Temp.cpp \
-    main.cpp \
+    0Temp.c \
+    main.c \
 
-DISTFILES += \
+DISTFILES = \
     install.sh \
-    meson.build
+    License.txt \
+    meson.build \
+    Readme.md \
 
 

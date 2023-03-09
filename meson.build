@@ -1,31 +1,31 @@
 project(
     'mpvcmd',
-    ['cpp'],
+    ['c'],
     version : '1.0',
     license : 'GPL-2.0',
     default_options : [
-        'cpp_std=c++11',
+        'c_std=c99',
     ],
 )
 
-cpp_args = [
+c_args = [
     '-Wall',
-    '-fno-rtti',
-    '-fno-exceptions',
+    '-Wextra',
     '-O2',
+    '-D_GNU_SOURCE',
 ]
 
 app_deps = [
-    dependency('tinycpp', static : true),
+    dependency('tinyc'),
 ]
 
-app_src = files(
-    'main.cpp',
-)
+app_src = [
+    'main.c',
+]
 
 executable(
-    'mpvcmd',
-    cpp_args : cpp_args,
+    meson.project_name(),
+    c_args : c_args,
     dependencies : app_deps,
     sources : app_src,
     install : true,

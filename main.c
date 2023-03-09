@@ -1,5 +1,5 @@
-#include <CString.h>
-#include <CList.h>
+#include <cstring.h>
+#include <clist.h>
 #include <libapp.h>
 
 #include <stdio.h>
@@ -14,10 +14,10 @@
 
 int main(int argc, char **argv)
 {
-    CString inpath;
+    CStringAuto *inpath = cstr_new_size(64);
 
     if (argc > 1)
-        inpath = argv[1];
+        cstr_copy(inpath, argv[1]);
 
     int sock = socket(AF_UNIX, SOCK_STREAM, 0);
 
@@ -34,29 +34,39 @@ int main(int argc, char **argv)
     strncpy(addr.sun_path, SOCKET_NAME, sizeof(addr.sun_path) - 1);
 
     int ret = connect(sock, (const struct sockaddr*) &addr, sizeof(addr));
+
+    // create first instance
     if (ret == -1)
     {
         close(sock);
 
-        CString cmd = strFmt("/usr/bin/mpv --idle --no-terminal --force-window --input-ipc-server=%s --",
-                             SOCKET_NAME);
+        CStringAuto *cmd = cstr_new_size(128);
+        cstr_fmt(cmd,
+                 "/usr/bin/mpv --idle --no-terminal --force-window --input-ipc-server=%s --",
+                 SOCKET_NAME);
 
-        if (!inpath.isEmpty())
+        if (!cstr_isempty(inpath))
         {
-            cmd += strFmt(" \"%s\"", inpath.c_str());
+            cstr_append(cmd, " \"");
+            cstr_append(cmd, c_str(inpath));
+            cstr_append(cmd, "\"");
+
+            //cmd += strFmt(" \"%s\"", inpath.c_str());
         }
 
-        pexec(cmd);
+        pexec(c_str(cmd));
 
         return EXIT_SUCCESS;
     }
 
-    if (!inpath.isEmpty())
+    // send load message to existing instance
+    if (!cstr_isempty(inpath))
     {
-        CString message = strFmt("loadfile \"%s\" replace panscan=0.0\n",
-                                 inpath.c_str());
+        CStringAuto *message = cstr_new_size(128);
+        cstr_fmt(message, "loadfile \"%s\" replace panscan=0.0\n",
+                          c_str(inpath));
 
-        ret = write(sock, message.c_str(), message.size() + 1);
+        ret = write(sock, c_str(message), cstr_size(message) + 1);
 
         if (ret == -1)
         {
