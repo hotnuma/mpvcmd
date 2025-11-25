@@ -10,7 +10,7 @@ PKGCONFIG += tinyc
 HEADERS =
 
 SOURCES = \
-    0Temp.c \
+    0temp.c \
     main.c \
 
 DISTFILES = \
