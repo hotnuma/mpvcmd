@@ -63,8 +63,14 @@ int main(int argc, char **argv)
     if (!cstr_isempty(inpath))
     {
         CStringAuto *message = cstr_new_size(128);
+
+#ifdef NEWVERSION
+        cstr_fmt(message, "loadfile \"%s\" replace\n",
+                 c_str(inpath));
+#else
         cstr_fmt(message, "loadfile \"%s\" replace panscan=0.0\n",
-                          c_str(inpath));
+                 c_str(inpath));
+#endif
 
         ret = write(sock, c_str(message), cstr_size(message) + 1);
 
