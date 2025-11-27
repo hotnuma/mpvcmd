@@ -11,7 +11,7 @@
 #include <print.h>
 
 #define SOCKET_NAME "/tmp/mpvsocket"
-//#define NOPANSCAN
+//#define NEED_INDEX
 
 int main(int argc, char **argv)
 {
@@ -65,8 +65,9 @@ int main(int argc, char **argv)
     {
         CStringAuto *message = cstr_new_size(128);
 
-#ifdef NOPANSCAN
-        cstr_fmt(message, "loadfile \"%s\" replace\n",
+        // Since mpv 0.38.0, an insertion index argument is added as the third argument.
+#ifdef NEED_INDEX
+        cstr_fmt(message, "loadfile \"%s\" replace -1 panscan=0.0\n",
                  c_str(inpath));
 #else
         cstr_fmt(message, "loadfile \"%s\" replace panscan=0.0\n",
