@@ -11,7 +11,7 @@
 #include <print.h>
 
 #define SOCKET_NAME "/tmp/mpvsocket"
-//#define NEWVERSION
+//#define NOPANSCAN
 
 int main(int argc, char **argv)
 {
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     {
         CStringAuto *message = cstr_new_size(128);
 
-#ifdef NEWVERSION
+#ifdef NOPANSCAN
         cstr_fmt(message, "loadfile \"%s\" replace\n",
                  c_str(inpath));
 #else
