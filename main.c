@@ -11,6 +11,7 @@
 #include <print.h>
 
 #define SOCKET_NAME "/tmp/mpvsocket"
+//#define NEWVERSION
 
 int main(int argc, char **argv)
 {
